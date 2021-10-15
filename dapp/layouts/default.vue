@@ -15,7 +15,7 @@
 
       <div class="social-btns">
         <v-btn
-          href="https://twitter.com/TheSharkMob"
+          href="https://twitter.com/ocg_NFT"
           target="_blank"
           fab
           text
@@ -25,7 +25,7 @@
         </v-btn>
 
         <v-btn
-          href="https://discord.com/invite/thesharkmob"
+          href="https://discord.com/invite/nBNwTQZh8t"
           target="_blank"
           fab
           text

@@ -124,11 +124,8 @@ contract OCG is ERC721Enumerable, Ownable {
 	}
 
 	// earnings withdrawal
-	function withdraw() public onlyOwner {
-		uint256 totalBalance = address(this).balance;
-		uint256 devFee = _calcPercentage(totalBalance, 500); //5%
-		payable(msg.sender).transfer(totalBalance - devFee);
-		payable(devWallet).transfer(devFee);
+	function withdrawEarnings() public onlyOwner {
+		payable(msg.sender).transfer(address(this).balance);
 	}
 
 	function reclaimERC20(IERC20 erc20Token) public onlyOwner {
@@ -177,11 +174,5 @@ contract OCG is ERC721Enumerable, Ownable {
 	// and for the eternity!
 	function lockMetadata() external onlyOwner {
 		locked = true;
-	}
-
-	//300 = 3%, 1 = 0.01%
-	function _calcPercentage(uint256 amount, uint256 basisPoints) internal pure returns (uint256) {
-		require(basisPoints >= 0);
-		return (amount * basisPoints) / 10000;
 	}
 }
