@@ -9,16 +9,13 @@
     >
       <v-toolbar-title>
         <nuxt-link style="text-decoration: none" to="/">
-          <span style="font-size: 2.375rem;
-            line-height: 2.375rem;
-            font-family: 'Poppins-ExtraBold';">
-          OGC City</span>
+          <img src="/images/logo.png" style="max-height: 80px" alt="logo png" />
         </nuxt-link>
       </v-toolbar-title>
 
       <div class="social-btns">
         <v-btn
-          href="https://twitter.com/ogccity"
+          href="https://twitter.com/TheSharkMob"
           target="_blank"
           fab
           text
@@ -27,8 +24,8 @@
           <v-icon>mdi-twitter</v-icon>
         </v-btn>
 
-         <v-btn
-          href="https://discord.com/invite/ogccity"
+        <v-btn
+          href="https://discord.com/invite/thesharkmob"
           target="_blank"
           fab
           text
@@ -47,11 +44,7 @@
       <nuxt />
     </v-main>
 
-    <img
-      src="/images/logo.png"
-      alt="ogccity logo"
-      class="logo-img"
-    />
+    <img src="/images/banner.png" alt="ocg logo" class="logo-img" />
   </v-app>
 </template>
 <script>
@@ -79,11 +72,9 @@ export default {
       window.open(url, '_blank')
     },
     async metamaskButtonClicked() {
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-      await provider.send("eth_requestAccounts", []);
-      this.signer = provider.getSigner();
-
+      const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+      await provider.send('eth_requestAccounts', [])
+      this.signer = provider.getSigner()
 
       this.provider = 'web3'
       this.ethers = new ethers.providers.Web3Provider(window.ethereum, 'any')
@@ -92,7 +83,6 @@ export default {
           window.location.reload()
         }
       })
-
 
       this.signer = this.ethers.getSigner()
       this.account = await this.signer.getAddress()
@@ -116,7 +106,6 @@ export default {
       if (chainId !== 1) {
         this.showNonMainnetWarning = true
       }
-
     },
   },
 }
@@ -148,7 +137,7 @@ a.nuxt-link-exact-active.list__tile--active.list__tile.list__tile--link {
   border-left: 10px solid #ff5122;
 }
 .glow {
-  -webkit-text-stroke: 1px #9fd8a3;
+  -webkit-text-stroke: 1px #97adc5;
   text-shadow: 0 0 15px rgb(137 246 143 / 77%), 0 0 10px transparent;
   -webkit-text-fill-color: transparent;
 }
@@ -175,10 +164,9 @@ h1 {
 
 .logo-img {
   width: 100%;
-  max-width: 820px;
+  max-height: 1200px;
   position: absolute;
   bottom: 0;
   z-index: 0;
 }
-
 </style>

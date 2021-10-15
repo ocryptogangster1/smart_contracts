@@ -15,8 +15,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: 'Crypto Gangsters NFT',
-    title: 'Crypto Gangsters NFT',
+    titleTemplate: 'OCGs',
+    title: 'OCGs Minting Page',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -24,7 +24,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'Crypto Gangsters',
+          'The OCGs with their roots in ghettos have taken up the metaverse now. They refuse to accept their fate living in slums, being disadvantaged, and controlled by the invisible hand. The OCGs are the brains of the new movement creating next level technology, crypto, and anonymous cash in their wallets. Be part of the OCGs!',
       },
     ],
     link: [

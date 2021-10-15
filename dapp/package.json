@@ -1,8 +1,8 @@
 {
-  "name": "ogccity",
+  "name": "ocg",
   "version": "1.0.0",
-  "description": "ogccity minting dapp",
-  "author": "https://ogc.city",
+  "description": "ocg",
+  "author": "https://ocg.city/",
   "license": "MIT",
   "private": true,
   "scripts": {

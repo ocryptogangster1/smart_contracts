@@ -3,7 +3,7 @@
     <v-flex xs12 sm8 md6 class="metamask-info-template__row">
       <v-card color="primary" class="metamask-info-template__card">
         <v-card-title class="headline white--text quick-font-fix-for-mobile"
-          >Metamask is needed to run this dapp!</v-card-title
+          >Metamask is needed to run this dapp</v-card-title
         >
         <v-card-text>
           <br /><br />

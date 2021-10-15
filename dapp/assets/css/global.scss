@@ -1,70 +1,22 @@
 @import 'reset';
 
-@font-face {
-  font-family: 'Poppins-Thin';
-  src: url('Poppins-Thin.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Poppins-Regular';
-  src: url('Poppins-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Poppins-Bold';
-  src: url('Poppins-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Poppins-ExtraBold';
-  src: url('Poppins-ExtraBold.ttf') format('truetype');
-}
-
 .application {
-  font-family: 'Poppins', sans-serif !important;
-  color: #fff;
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+  font-size: 106.25%;
 }
 
 #app {
-  background-image: linear-gradient(rgb(70 70 70 / 50%), rgb(0 0 0)), url(/images/background.png);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+  font-size: 106.25%;
+  background-color: #000;
+  // background-image: radial-gradient(
+  //   circle farthest-corner at 50% 50%,
+  //   #252525,
+  //   #000
+  // );
 }
-
-#app,
-#app div,
-#app a,
-#app span,
-#app table,
-#app thead,
-#app tbody,
-#app tr,
-#app td {
-  font-family: 'Poppins-Regular';
-  color: #fff;
-  font-size: 1.04em;
-  /* Location of the image */
-  //   background-image: url(/cat_saloon.jpeg);
-
-  //   /* Background image is centered vertically and horizontally at all times */
-  //   background-position: center center;
-
-  //   /* Background image doesn’t tile */
-  //   background-repeat: no-repeat;
-
-  //   /* Background image is fixed in the viewport so that it doesn’t move when
-  // the content’s height is greater than the image’s height */
-  //   background-attachment: fixed;
-
-  //   /* This is what makes the background image rescale based
-  // on the container’s size */
-  //   background-size: cover;
-
-  /* Set a background color that will be displayed
-while the background image is loading */
-}
-
 .toasted {
   font-family: 'Bangers', cursive !important;
 }
@@ -311,7 +263,7 @@ tr:hover {
 }
 
 .toasted {
-  font-family: "Poppins-Regular" !important;
+  font-family: 'Poppins-Regular' !important;
   font-size: 1.2em !important;
   background: #8ae8d6 !important;
   color: #000000 !important;

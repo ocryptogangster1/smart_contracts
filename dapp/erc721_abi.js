@@ -49,37 +49,6 @@ export const ERC721_ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'nftID',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'value',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'actionID',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'payload',
-        type: 'string',
-      },
-    ],
-    name: 'CustomThing',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: 'address',
         name: 'previousOwner',
@@ -155,7 +124,21 @@ export const ERC721_ABI = [
   },
   {
     inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
-    name: 'changePrice',
+    name: 'changePriceFlash',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
+    name: 'changePricePresale',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
+    name: 'changePricePublicSale',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -165,17 +148,6 @@ export const ERC721_ABI = [
     name: 'contractURI',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint256', name: 'nftID', type: 'uint256' },
-      { internalType: 'uint256', name: 'id', type: 'uint256' },
-      { internalType: 'string', name: 'what', type: 'string' },
-    ],
-    name: 'customThing',
-    outputs: [],
-    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -190,6 +162,20 @@ export const ERC721_ABI = [
   {
     inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'exists',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
+    name: 'flashBuy',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'flashLive',
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
@@ -237,14 +223,14 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'maxPresale',
+    name: 'maxFlashSale',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'maxQtyForPublicSale',
+    name: 'maxPresale',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -278,22 +264,10 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'bytes32', name: 'hash', type: 'bytes32' },
-      { internalType: 'bytes', name: 'sig', type: 'bytes' },
-      { internalType: 'uint256', name: 'qty', type: 'uint256' },
-      { internalType: 'string', name: 'nonce', type: 'string' },
-    ],
+    inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
     name: 'presaleBuy',
     outputs: [],
     stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'presaleCounter',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -312,25 +286,21 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'publicAmountMinted',
+    name: 'pricePerTokenFlashSale',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'bytes32', name: 'hash', type: 'bytes32' },
-      { internalType: 'bytes', name: 'sig', type: 'bytes' },
-      { internalType: 'string', name: 'nonce', type: 'string' },
-    ],
-    name: 'publicBuy',
-    outputs: [],
-    stateMutability: 'payable',
+    inputs: [],
+    name: 'pricePerTokenPresale',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
-    name: 'publicBuyX2',
+    name: 'publicBuy',
     outputs: [],
     stateMutability: 'payable',
     type: 'function',
@@ -382,13 +352,6 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'saleLiveX2',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       { internalType: 'address', name: 'operator', type: 'address' },
       { internalType: 'bool', name: 'approved', type: 'bool' },
@@ -422,13 +385,6 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: 'addr', type: 'address' }],
-    name: 'setSignerAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
     name: 'supportsInterface',
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
@@ -444,6 +400,13 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
+    name: 'toggleFlashStatus',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'togglePresaleStatus',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -451,14 +414,7 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'toggleSaleStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'toggleSaleStatusX2',
+    name: 'togglePublicSaleStatus',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -521,7 +477,7 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'withdrawEarnings',
+    name: 'withdraw',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

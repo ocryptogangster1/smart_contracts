@@ -14,7 +14,7 @@ async function main() {
 	await hre.run("compile")
 
 	// We get the contract to deploy
-	const NFTContract = await hre.ethers.getContractFactory("OGC")
+	const NFTContract = await hre.ethers.getContractFactory("OCG")
 	console.log("Deploying NFT Contract...")
 
 	let network = process.env.NETWORK ? process.env.NETWORK : "rinkeby"
