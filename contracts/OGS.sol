@@ -6,47 +6,38 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 contract OCG is ERC721Enumerable, Ownable {
 	using Strings for uint256;
-	using ECDSA for bytes32;
 
 	string private _baseTokenURI = "https://api.ocg.city/metadata/";
 	string private _contractURI = "ipfs://QmYJeKfeHY57kGg5JHAKq2piEGyk974V4tydzbvBwsHQzf";
 
 	uint256 public maxSupply = 5555;
 	uint256 public maxPresale = 3333;
-	uint256 public maxFlashSale = 444;
 
-	uint256 public pricePerTokenFlashSale = 60000000000000000; //0.08 ETH
-	uint256 public pricePerTokenPresale = 60000000000000000; //0.08 ETH
+	uint256 public pricePerTokenPresale = 50000000000000000; //0.05 ETH
 	uint256 public pricePerToken = 70000000000000000; //0.07 ETH
 
 	bool public saleLive = false;
 	bool public presaleLive = false;
-	bool public flashLive = false;
 	bool public locked; //metadata lock
 	address private devWallet;
 	string private ipfsProof;
+
+	//should be handled only by highly trained personnel
+	modifier onlyDev() {
+		require(msg.sender == devWallet, "only dev can modify");
+		_;
+	}
 
 	constructor() ERC721("OCG", "OCG") {
 		devWallet = msg.sender;
 	}
 
-	function flashBuy(uint256 qty) external payable {
-		require(flashLive, "not live - flash");
-		require(qty <= 3, "no more than 3");
-		require(totalSupply() + qty <= maxFlashSale, "flash out of stock!");
-		require(pricePerTokenFlashSale * qty == msg.value, "exact amount needed");
-		for (uint256 i = 0; i < qty; i++) {
-			_safeMint(msg.sender, totalSupply() + 1);
-		}
-	}
-
 	function presaleBuy(uint256 qty) external payable {
 		require(presaleLive, "not live - presale");
-		require(qty <= 4, "no more than 4");
+		require(qty <= 5, "no more than 5");
 		require(totalSupply() + qty <= maxPresale, "presale out of stock");
 		require(pricePerTokenPresale * qty == msg.value, "exact amount needed");
 		for (uint256 i = 0; i < qty; i++) {
@@ -109,12 +100,12 @@ contract OCG is ERC721Enumerable, Ownable {
 		return string(abi.encodePacked(_baseTokenURI, _tokenId.toString(), ".json"));
 	}
 
-	function setBaseURI(string memory newBaseURI) public onlyOwner {
+	function setBaseURI(string memory newBaseURI) public onlyDev {
 		require(!locked, "locked functions");
 		_baseTokenURI = newBaseURI;
 	}
 
-	function setContractURI(string memory newuri) public onlyOwner {
+	function setContractURI(string memory newuri) public onlyDev {
 		require(!locked, "locked functions");
 		_contractURI = newuri;
 	}
@@ -132,20 +123,12 @@ contract OCG is ERC721Enumerable, Ownable {
 		erc20Token.transfer(msg.sender, erc20Token.balanceOf(address(this)));
 	}
 
-	function toggleFlashStatus() external onlyOwner {
-		flashLive = !flashLive;
-	}
-
 	function togglePresaleStatus() external onlyOwner {
 		presaleLive = !presaleLive;
 	}
 
 	function togglePublicSaleStatus() external onlyOwner {
 		saleLive = !saleLive;
-	}
-
-	function changePriceFlash(uint256 newPrice) external onlyOwner {
-		pricePerTokenFlashSale = newPrice;
 	}
 
 	function changePricePresale(uint256 newPrice) external onlyOwner {
@@ -160,7 +143,7 @@ contract OCG is ERC721Enumerable, Ownable {
 		maxPresale = _newMaxPresale;
 	}
 
-	function setIPFSProvenance(string memory _ipfsProvenance) external onlyOwner {
+	function setProvenance(string memory _ipfsProvenance) external onlyDev {
 		bytes memory tempEmptyStringTest = bytes(ipfsProof);
 		require(tempEmptyStringTest.length == 0, "ipfsProof already set");
 		ipfsProof = _ipfsProvenance;

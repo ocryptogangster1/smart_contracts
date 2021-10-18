@@ -1,1 +1,1 @@
-abigen --abi build/Metasaurs.abi --pkg metasaurs --out metasaurs.go
+abigen --abi build/OCG.abi --pkg ocg --out ocg.go

@@ -8,7 +8,7 @@ let owner, acc1, acc2
 
 describe("NFT", function () {
 	beforeEach(async function () {
-		let TContract = await ethers.getContractFactory("Metasaurs")
+		let TContract = await ethers.getContractFactory("OCG")
 
 		nft = await TContract.deploy()
 		await nft.deployed()

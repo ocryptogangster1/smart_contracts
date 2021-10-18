@@ -203,25 +203,17 @@ export default {
       this.totalMinted = Number(await this.contract.totalSupply())
       this.isSaleActive = Number(await this.contract.saleLive())
       this.isPresaleActive = Number(await this.contract.presaleLive())
-      this.isFlashActive = Number(await this.contract.flashLive())
       this.maxSupply = Number(await this.contract.maxSupply())
       this.maxPresale = Number(await this.contract.maxPresale())
-      this.maxFlashSale = Number(await this.contract.maxFlashSale())
 
       console.log('Total minted = ', this.totalMinted)
-      console.log('isFlashActive = ', this.isFlashActive)
       console.log('isPresaleActive = ', this.isPresaleActive)
       console.log('isSaleActive = ', this.isSaleActive)
-      console.log('maxFlashSale = ', this.maxFlashSale)
       console.log('maxPresale = ', this.maxPresale)
       console.log('maxSupply = ', this.maxSupply)
     },
 
     async mintBtnPressed() {
-      if (this.isFlashActive === 1) {
-        console.log('redirect to flash sale buy')
-        await this.flashSaleBuy(this.amount)
-      }
       if (this.isPresaleActive === 1) {
         console.log('redirect to presale sale buy')
         await this.preSaleBuy(this.amount)
@@ -231,43 +223,6 @@ export default {
         await this.publicSaleBuy(this.amount)
       }
     },
-
-    async flashSaleBuy(quantity) {
-      this.txHash = null
-
-      this.ethers = new ethers.providers.Web3Provider(window.ethereum, 'any')
-      await this.ethers.send('eth_requestAccounts', [])
-
-      this.signer = this.ethers.getSigner()
-      this.contract = new ethers.Contract(
-        CONTRACT_ADDR,
-        ERC721_ABI,
-        this.signer
-      )
-
-      try {
-        const gasLimit = quantity * 200000
-        this.itemPriceWei = Number(70000000000000000) //TODO: MODIFY IT FOR SALE
-
-        const overrides = {
-          value: String(Number(quantity) * Number(this.itemPriceWei)),
-          gasLimit: gasLimit,
-        }
-
-        const tx = await this.contract.flashBuy(quantity, overrides)
-        if (tx.hash) {
-          this.$toast.info('transaction submitted successfully')
-        }
-        this.txHash = tx.hash
-      } catch (err) {
-        if (err.message.includes('denied')) {
-          this.$toast.info('you canceled the transaction')
-        } else {
-          this.$toast.error(err.message)
-        }
-      }
-    },
-
     async preSaleBuy(quantity) {
       this.txHash = null
 

@@ -1,7 +1,5 @@
-# METASAURS
+# OCG
 
-mainnet: https://etherscan.io/address/0xF7143Ba42d40EAeB49b88DaC0067e54Af042E963#code
+Rinkeby: https://rinkeby.etherscan.io/address/0x709483C1c64345b26ae088Eb4b00531cA2A5192d#code
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/fe200a4f-7598-4a63-8f6d-5e125da06c3d/deploy-status)](https://app.netlify.com/sites/metasaurs/deploys)
-
-### License: COMMERCIAL LOL
+### License: MIT

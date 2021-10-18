@@ -124,13 +124,6 @@ export const ERC721_ABI = [
   },
   {
     inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
-    name: 'changePriceFlash',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
     name: 'changePricePresale',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -162,20 +155,6 @@ export const ERC721_ABI = [
   {
     inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
     name: 'exists',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
-    name: 'flashBuy',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'flashLive',
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
@@ -218,13 +197,6 @@ export const ERC721_ABI = [
     inputs: [],
     name: 'locked',
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'maxFlashSale',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -280,13 +252,6 @@ export const ERC721_ABI = [
   {
     inputs: [],
     name: 'pricePerToken',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'pricePerTokenFlashSale',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -379,7 +344,7 @@ export const ERC721_ABI = [
     inputs: [
       { internalType: 'string', name: '_ipfsProvenance', type: 'string' },
     ],
-    name: 'setIPFSProvenance',
+    name: 'setProvenance',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -396,13 +361,6 @@ export const ERC721_ABI = [
     name: 'symbol',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'toggleFlashStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -477,7 +435,7 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'withdraw',
+    name: 'withdrawEarnings',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
