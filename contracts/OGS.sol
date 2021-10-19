@@ -25,6 +25,8 @@ contract OCG is ERC721Enumerable, Ownable {
 	address private devWallet;
 	string private ipfsProof;
 
+	mapping(address => uint256) whitelist;
+
 	//should be handled only by highly trained personnel
 	modifier onlyDev() {
 		require(msg.sender == devWallet, "only dev can modify");
@@ -37,6 +39,7 @@ contract OCG is ERC721Enumerable, Ownable {
 
 	function presaleBuy(uint256 qty) external payable {
 		require(presaleLive, "not live - presale");
+		require(isWhitelisted(msg.sender), "not whitelisted");
 		require(qty <= 5, "no more than 5");
 		require(totalSupply() + qty <= maxPresale, "presale out of stock");
 		require(pricePerTokenPresale * qty == msg.value, "exact amount needed");
@@ -157,5 +160,23 @@ contract OCG is ERC721Enumerable, Ownable {
 	// and for the eternity!
 	function lockMetadata() external onlyOwner {
 		locked = true;
+	}
+
+	function batchAddToWhitelist(address[] memory addresses) external onlyOwner {
+		require(addresses.length <= 50, "max 50 addresses");
+		for (uint256 i = 0; i < addresses.length; i++) {
+			whitelist[addresses[i]] = 1;
+		}
+	}
+
+	function whitelistRemove(address _address) public onlyOwner {
+		whitelist[_address] = 1;
+	}
+
+	function isWhitelisted(address _address) public view returns (bool) {
+		if (whitelist[_address] == 1) {
+			return true;
+		}
+		return false;
 	}
 }

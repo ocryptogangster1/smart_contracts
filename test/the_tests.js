@@ -18,12 +18,47 @@ describe("NFT", function () {
 		acc1 = signers[1]
 		acc2 = signers[2]
 
-		await nft.toggleSaleStatus()
 		await nft.togglePresaleStatus()
+		await nft.togglePublicSaleStatus()
 	})
 
 	it("simple test...", async function () {
 		expect(await nft.totalSupply()).to.equal(0)
+	})
+
+	it("whitelisting 10 addresses cost", async function () {
+		await nft.batchAddToWhitelist([
+			"0x0aCa1B52A81A718a410057A431c8c67208612F92",
+			"0x2F929a7452104B9b18e0c1F86860171b79b685ff",
+			"0x481d1432A3eA9Dc2A00db12E13aB39D8EF5aB174",
+			"0x2bf09d569E7009F9dad237c29347e5CA7F2b732d",
+			"0xBb1eEBf916848Fa473bd0898cB5ed05590c8c2d8",
+			"0x6f77Daf80D89a9Ec184799eCA70B8103F59D652b",
+			"0x4634a7D6014924F6fd77C94Fe6B42Ac1defFc312",
+			"0x02d9e8a09299c85c6cF2426D70b92CB4EDE93207",
+			"0x8F5634c7F5a3DABD02DEDA8E6FADd4D64Ec0DF1C",
+			"0xA477d38D3dFA57b0D513365C6cD9131D5E977c55",
+		])
+		expect(await nft.isWhitelisted("0xA477d38D3dFA57b0D513365C6cD9131D5E977c55")).to.equal(true)
+		expect(await nft.isWhitelisted("0xf4E9cC8500a5D7Ec83179a5E4e29615b064394d8")).to.equal(false)
+	})
+
+	it("presale needs whitelist", async function () {
+		await nft.batchAddToWhitelist([
+			"0x0aCa1B52A81A718a410057A431c8c67208612F92",
+			"0x2F929a7452104B9b18e0c1F86860171b79b685ff",
+		])
+		expect(await nft.isWhitelisted("0x0aCa1B52A81A718a410057A431c8c67208612F92")).to.equal(true)
+
+		await expect(
+			nft.connect(acc1).presaleBuy(1, { value: web3.utils.toWei("0.07", "ether") })
+		).to.be.revertedWith("not whitelisted")
+
+		await nft.batchAddToWhitelist([acc1.address])
+
+		expect(await nft.balanceOf(acc1.address)).to.equal(0)
+		await nft.connect(acc1).presaleBuy(1, { value: web3.utils.toWei("0.05", "ether") })
+		expect(await nft.balanceOf(acc1.address)).to.equal(1)
 	})
 
 	// function publicBuy(uint256 qty) external payable {
@@ -35,23 +70,23 @@ describe("NFT", function () {
 	// 		_safeMint(msg.sender, totalSupply() + 1);
 	// 	}
 	// }
-	it("purchasing tokens works", async function () {
-		await expect(
-			nft.connect(acc1).publicBuy(1, { value: web3.utils.toWei("0.09", "ether") })
-		).to.emit(nft, "Transfer")
-		await expect(
-			nft.connect(acc1).publicBuy(3, { value: web3.utils.toWei("0.27", "ether") })
-		).to.emit(nft, "Transfer")
-	})
+	// it("purchasing tokens works", async function () {
+	// 	await expect(
+	// 		nft.connect(acc1).publicBuy(1, { value: web3.utils.toWei("0.09", "ether") })
+	// 	).to.emit(nft, "Transfer")
+	// 	await expect(
+	// 		nft.connect(acc1).publicBuy(3, { value: web3.utils.toWei("0.27", "ether") })
+	// 	).to.emit(nft, "Transfer")
+	// })
 
-	it("burning tokens works", async function () {
-		await expect(
-			nft.connect(acc1).publicBuy(3, { value: web3.utils.toWei("0.27", "ether") })
-		).to.emit(nft, "Transfer")
-		expect(await nft.balanceOf(acc1.address)).to.equal(3)
-		await nft.connect(acc1).burn(1)
-		expect(await nft.balanceOf(acc1.address)).to.equal(2)
-	})
+	// it("burning tokens works", async function () {
+	// 	await expect(
+	// 		nft.connect(acc1).publicBuy(3, { value: web3.utils.toWei("0.27", "ether") })
+	// 	).to.emit(nft, "Transfer")
+	// 	expect(await nft.balanceOf(acc1.address)).to.equal(3)
+	// 	await nft.connect(acc1).burn(1)
+	// 	expect(await nft.balanceOf(acc1.address)).to.equal(2)
+	// })
 
 	// it("purchasing 3 tokens works", async function () {
 	// 	await nft.startSale()
