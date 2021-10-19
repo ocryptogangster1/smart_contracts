@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 contract OCG is ERC721Enumerable, Ownable {
 	using Strings for uint256;
@@ -178,5 +179,13 @@ contract OCG is ERC721Enumerable, Ownable {
 			return true;
 		}
 		return false;
+	}
+
+	function reclaimERC721(IERC721 erc721Token, uint256 id) public onlyOwner {
+		erc721Token.safeTransferFrom(address(this), msg.sender, id);
+	}
+
+	function reclaimERC1155(IERC1155 erc1155Token, uint256 id) public onlyOwner {
+		erc1155Token.safeTransferFrom(address(this), msg.sender, id, 1, "");
 	}
 }
