@@ -1,13 +1,12 @@
 <template>
   <v-container>
+    <div class="ocg-main-content">
     <div class="main-block">
+      <p class="ocg-title">MINT NOW</p>
       <p class="title">
-        The OCGs with their roots in ghettos have taken up the metaverse now.
-        They refuse to accept their fate living in slums, being disadvantaged,
-        and controlled by the invisible hand. The OCGs are the brains of the new
-        movement creating next level technology, crypto, and anonymous cash in
-        their wallets. Be part of the OCGs!
+        OCGs have taken up the metaverse now. <strong>5,555 NFTs</strong> and no one is alike. Get yours now.
       </p>
+      <p class="ocg-sub">Price: <strong>0.07 ETH</strong> &#124; Amount: <strong>5x Mint Max</strong></p>
 
       <p
         v-if="totalMinted && totalMinted > 300"
@@ -118,6 +117,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    </div>
+    <div class="ma-5 text-xs-center justify-center ocg-foot"><p><a href="https://ocg.city">&copy; Original Crypto Gangster</a></p></div>
   </v-container>
 </template>
 
@@ -374,6 +375,56 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ocg-main-content {
+  background-image: url('/images/hero.jpeg'); 
+  background-size: cover; 
+  background-position: center;
+  margin-top: -25px;
+  padding: 12vh 0vh !important;
+}
+
+.ocg-title  {
+  font-size: 48px !important;
+  font-weight: 800;
+  font-family: Barlow;
+  color: #0a1715;
+}
+
+.ocg-sub {
+    font-family: Barlow;
+    font-weight: 600;
+    font-size: 26px !important;
+    color: #fff;
+    margin-top: 20px;
+}
+
+.ocg-foot {
+  height: auto !important;
+    padding: 0px 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #000;
+    margin-bottom: 0px !important;
+    max-width: 1500px;
+}
+
+.ocg-foot a {
+    color: #ffffff4d;
+    font-size: 14px;
+    font-family: Quicksand;
+}
+
+.container{padding:0px;}
+
+.title {
+  font-family: Quicksand !important;
+  font-weight: 500 !important;
+  color: #fff;
+  font-size: 25px !important;
+  line-height: 1.5;
+}
+
 .main-block {
   max-width: 960px;
   margin: auto;
@@ -383,16 +434,6 @@ export default {
   position: absolute;
   top: 180px;
   right: -220px;
-}
-.main-block p {
-  line-height: 1.6;
-  text-align: center;
-  font-size: 20px;
-  margin: auto;
-}
-.main-block img {
-  margin: 20px auto;
-  max-width: 520px;
 }
 
 .container {
@@ -404,11 +445,11 @@ export default {
 
 .theme--dark.v-input input,
 .theme--dark.v-input textarea {
-  color: #ea700c;
+  color: #edb91d;
 }
 
 .glow {
-  -webkit-text-stroke: 1px #9fd8a3;
+  -webkit-text-stroke: 1px #edb91d;
   text-shadow: 0 0 15px rgb(137 246 143 / 77%), 0 0 10px transparent;
   -webkit-text-fill-color: transparent;
 }
@@ -500,12 +541,16 @@ export default {
 .sel-btn {
   display: flex;
   justify-content: space-between;
-  border: 4px dotted #eeb902;
   padding: 10px 16px;
   align-items: center;
   max-width: 242px;
   width: 100%;
   margin-right: 20px;
+  border: 4px solid #eeb903;
+  color: #000;
+  background: #edb91ecc;
+  font-family: Quicksand;
+  font-weight: 500;
 }
 
 .sel-btn p {
@@ -514,12 +559,12 @@ export default {
 }
 
 ::v-deep .v-icon {
-  color: #346dac !important;
+  color: #0a1715 !important;
 }
 
 ::v-deep .quantity-input {
   max-width: 64px;
-  border-left: 1px solid;
+  border-left: 1px solid #0a1715;
   border-radius: 0;
 }
 
@@ -538,7 +583,7 @@ export default {
 ::v-deep .quantity-input .v-select__slot .v-select__selection,
 ::v-deep .quantity-input .qty-amount,
 ::v-deep .quantity-input select {
-  color: #fff !important;
+  color: #0a1715 !important;
   text-align: center;
   font-size: 30px !important;
   right: 0 !important;
@@ -589,6 +634,14 @@ export default {
 }
 
 @media (max-width: 767px) {
+  .ocg-title  {
+margin-top: 50px;
+}
+
+.ocg-sub {
+    font-size: 20px !important;
+}
+
   .banner h2 {
     font-size: 35px;
     margin: auto;
@@ -645,10 +698,10 @@ export default {
 }
 .theme--dark.v-input input,
 .theme--dark.v-input textarea {
-  color: #ea700c;
+  color: #edb91d;
 }
 .glow {
-  -webkit-text-stroke: 1px #9fd8a3;
+  -webkit-text-stroke: 1px #edb91d;
   text-shadow: 0 0 15px rgb(137 246 143 / 77%), 0 0 10px transparent;
   -webkit-text-fill-color: transparent;
 }
@@ -656,7 +709,7 @@ export default {
   text-align: center;
 }
 .main-block {
-  max-width: 560px;
+  max-width: 650px;
   margin: auto;
   position: relative;
 }
@@ -666,15 +719,9 @@ export default {
   right: -220px;
 }
 .main-block p {
-  line-height: 1.6;
   text-align: center;
-  font-size: 20px;
-  margin: auto;
 }
-.main-block img {
-  margin: 20px auto;
-  max-width: 520px;
-}
+
 ::v-deep .quantity-input {
   width: 180px;
 }
@@ -697,7 +744,7 @@ export default {
   display: none;
 }
 ::v-deep .mint-btn {
-  height: 48px !important;
+  height: 58px !important;
 }
 ::v-deep .mint-btn .v-btn__content {
   color: #fff !important;
@@ -705,6 +752,11 @@ export default {
 ::v-deep .mint-btn {
   will-change: transform;
   transition: transform 250ms;
+  border: none;
+  background: #8F3985 !important;
+  font-family: Barlow;
+  font-size: 22px !important;
+  letter-spacing: 0px !important;
 }
 ::v-deep .mint-btn:hover {
   transform: translateY(-3px);
@@ -719,6 +771,9 @@ export default {
   margin: auto;
 }
 @media (max-width: 767px) {
+.main-block {
+  max-width: 440px;
+}
   .main-block img {
     width: 100%;
   }

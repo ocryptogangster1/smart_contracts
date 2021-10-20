@@ -9,11 +9,20 @@
     >
       <v-toolbar-title>
         <nuxt-link style="text-decoration: none" to="/">
-          <img src="/images/logo.png" style="max-height: 80px" alt="logo png" />
+          <img src="/images/logo.png" style="max-height: 120px" alt="logo png" />
         </nuxt-link>
       </v-toolbar-title>
 
       <div class="social-btns">
+                      <v-btn
+          href="https://ocg.city"
+          target="_blank"
+          fab
+          text
+          redtext
+        >
+          <v-icon>mdi-home</v-icon>
+        </v-btn>
         <v-btn
           href="https://twitter.com/ocg_NFT"
           target="_blank"
@@ -44,7 +53,6 @@
       <nuxt />
     </v-main>
 
-    <img src="/images/banner.png" alt="ocg logo" class="logo-img" />
   </v-app>
 </template>
 <script>
@@ -134,7 +142,7 @@ a.nuxt-link-exact-active.list__tile--active.list__tile.list__tile--link {
 }
 .v-list-item--active {
   color: #333;
-  border-left: 10px solid #ff5122;
+  border-left: 10px solid #edb91d;
 }
 .glow {
   -webkit-text-stroke: 1px #97adc5;
@@ -154,12 +162,13 @@ h1 {
 }
 
 ::v-deep .social-btns a {
-  width: 72px;
-  height: 72px;
+  width: 48px;
+  height: 48px;
 }
 
 ::v-deep .social-btns i {
-  font-size: 42px !important;
+  font-size: 28px !important;
+    color: #0a1715 !important;
 }
 
 .logo-img {

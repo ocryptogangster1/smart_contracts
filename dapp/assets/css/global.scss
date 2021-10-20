@@ -84,11 +84,24 @@ tr:hover {
 
   .v-toolbar__content {
     height: auto !important;
-    padding: 20px 40px;
+    padding: 0px 40px;
     justify-content: space-between;
+    background: #edb91d;
+    max-height: 100px;
+  }
+
+  .v-toolbar__content {
+    border-top: 15px solid #8F3985 !important;
+  }
+
+  .v-toolbar__title {
+    margin-top: 35px;
   }
 
   @media (max-width: 767px) {
+    .v-toolbar__title {
+      margin-top: 0px;
+    }
     .v-toolbar__content {
       flex-wrap: wrap;
       justify-content: center;
