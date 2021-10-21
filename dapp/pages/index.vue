@@ -1,124 +1,138 @@
 <template>
   <v-container>
     <div class="ocg-main-content">
-    <div class="main-block">
-      <p class="ocg-title">MINT NOW</p>
-      <p class="title">
-        OCGs have taken up the metaverse now. <strong>5,555 NFTs</strong> and no one is alike. Get yours now.
-      </p>
-      <p class="ocg-sub">Price: <strong>0.07 ETH</strong> &#124; Amount: <strong>5x Mint Max</strong></p>
+      <div class="main-block">
+        <p class="ocg-title">MINT NOW</p>
+        <p class="title">
+          OCGs have taken up the metaverse now. <strong>5,555 NFTs</strong> and
+          no one is alike. Get yours now.
+        </p>
+        <p class="ocg-sub">
+          Price: <strong>0.07 ETH</strong> &#124; Amount:
+          <strong>5x Mint Max</strong>
+        </p>
 
-      <p
-        v-if="totalMinted && totalMinted > 300"
-        class="display-1 ma-5 subtitle text-xs-center justify-center"
-        style="text-align: center; font-weight: bold"
-      >
-        <br /><br />
-        <span class="display-3 glow" style="font-weight: bold"
-          >FLASH SALE SOLD OUT!
-        </span>
-        <br />
-        <br />
-        Thank you for participating!<br /><br />
-      </p>
+        <p
+          v-if="totalMinted && totalMinted > 300"
+          class="display-1 ma-5 subtitle text-xs-center justify-center"
+          style="text-align: center; font-weight: bold"
+        >
+          <br /><br />
+          <span class="display-3 glow" style="font-weight: bold"
+            >FLASH SALE SOLD OUT!
+          </span>
+          <br />
+          <br />
+          Thank you for participating!<br /><br />
+        </p>
+
+        <v-card
+          style="text-align: center"
+          class="pa-5 ma-5 text-xs-center justify-center"
+          v-if="
+            totalMinted < 7777 &&
+            !txHash &&
+            (isPresaleActive === 1 || isFlashActive === 1 || isSaleActive === 1)
+          "
+          elevation="0"
+        >
+          <div class="search-form__row text-xs-center justify-center">
+            <v-form lazy-validation>
+              <div>
+                <div class="sel-btn">
+                  <p>Quantity</p>
+                  <v-select
+                    :items="Array.from({ length: 5 }, (_, i) => i + 1)"
+                    class="quantity-input text-center"
+                    label="Qty"
+                    v-model="amount"
+                    solo
+                    required
+                  >
+                    <template slot="selection" slot-scope="{ item }">
+                      <span class="mx-auto qty-amount">
+                        {{ item }}
+                      </span>
+                    </template>
+                  </v-select>
+                </div>
+
+                <v-btn
+                  solo
+                  class="mint-btn"
+                  @click="
+                    errorText = ''
+                    mintBtnPressed()
+                  "
+                >
+                  GRAB ONE
+                </v-btn>
+              </div>
+            </v-form>
+          </div>
+        </v-card>
+      </div>
 
       <v-card
+        v-if="txHash"
         style="text-align: center"
         class="pa-5 ma-5 text-xs-center justify-center"
-        v-if="
-          totalMinted < 7777 &&
-          !txHash &&
-          (isPresaleActive === 1 || isFlashActive === 1 || isSaleActive === 1)
-        "
-        elevation="0"
+        color="#333"
       >
-        <div class="search-form__row text-xs-center justify-center">
-          <v-form lazy-validation>
-            <div>
-              <div class="sel-btn">
-                <p>Quantity</p>
-                <v-select
-                  :items="Array.from({ length: 3 }, (_, i) => i + 1)"
-                  class="quantity-input text-center"
-                  label="Qty"
-                  v-model="amount"
-                  solo
-                  required
-                >
-                  <template slot="selection" slot-scope="{ item }">
-                    <span class="mx-auto qty-amount">
-                      {{ item }}
-                    </span>
-                  </template>
-                </v-select>
-              </div>
-
-              <v-btn
-                solo
-                class="mint-btn"
-                @click="
-                  errorText = ''
-                  mintBtnPressed()
-                "
-              >
-                GRAB ONE
-              </v-btn>
-            </div>
-          </v-form>
-        </div>
+        <p style="text-align: center" class="title ma-5">
+          You can check the transaction status
+          <span style="font-weight: bold"
+            ><a target="_blank" :href="`https://etherscan.io/tx/${txHash}`"
+              >here</a
+            ></span
+          >
+        </p>
+        <p style="text-align: center">
+          In a few minutes, your NFT will show up in Opensea<br />
+          <span style="font-weight: bold">
+            <a
+              target="_blank"
+              href="https://opensea.io/collection/original-crypto-gangster"
+              >opensea.io/collection/original-crypto-gangster</a
+            >
+          </span>
+        </p>
+        <br />
       </v-card>
-    </div>
 
-    <v-card
-      v-if="txHash"
-      style="text-align: center"
-      class="pa-5 ma-5 text-xs-center justify-center"
-      color="#333"
-    >
-      <p style="text-align: center" class="title ma-5">
-        You can check the transaction status
-        <span style="font-weight: bold"
-          ><a target="_blank" :href="`https://etherscan.io/tx/${txHash}`"
-            >here</a
-          ></span
+      <v-dialog v-model="dialogError" class="ma-5 pa-5" max-width="600px">
+        <v-card class="warning">
+          <v-card-title>
+            <span>{{ errorText }}</span>
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="
+                dialogError = false
+                errorText = ''
+              "
+            >
+              EXIT
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+    <div class="ma-5 text-xs-center justify-center ocg-foot">
+      <p>
+        <a
+          target="_blank"
+          style="text-decoration: underline"
+          :href="`https://etherscan.io/address/${contractAddress}`"
+          >CONTRACT @ {{ contractAddress }}</a
         >
+        <a href="https://ocg.city">&copy; Original Crypto Gangster</a>
       </p>
-      <p style="text-align: center">
-        In a few minutes, your NFT will show up in Opensea<br />
-        <span style="font-weight: bold">
-          <a
-            target="_blank"
-            href="https://opensea.io/collection/original-crypto-gangster"
-            >opensea.io/collection/original-crypto-gangster</a
-          >
-        </span>
-      </p>
-      <br />
-    </v-card>
-
-    <v-dialog v-model="dialogError" class="ma-5 pa-5" max-width="600px">
-      <v-card class="warning">
-        <v-card-title>
-          <span>{{ errorText }}</span>
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="
-              dialogError = false
-              errorText = ''
-            "
-          >
-            EXIT
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     </div>
-    <div class="ma-5 text-xs-center justify-center ocg-foot"><p><a href="https://ocg.city">&copy; Original Crypto Gangster</a></p></div>
   </v-container>
 </template>
 
@@ -376,14 +390,14 @@ export default {
 
 <style lang="scss" scoped>
 .ocg-main-content {
-  background-image: url('/images/hero.jpeg'); 
-  background-size: cover; 
+  background-image: url('/images/hero.jpeg');
+  background-size: cover;
   background-position: center;
   margin-top: -25px;
   padding: 12vh 0vh !important;
 }
 
-.ocg-title  {
+.ocg-title {
   font-size: 48px !important;
   font-weight: 800;
   font-family: Barlow;
@@ -391,31 +405,33 @@ export default {
 }
 
 .ocg-sub {
-    font-family: Barlow;
-    font-weight: 600;
-    font-size: 26px !important;
-    color: #fff;
-    margin-top: 20px;
+  font-family: Barlow;
+  font-weight: 600;
+  font-size: 26px !important;
+  color: #fff;
+  margin-top: 20px;
 }
 
 .ocg-foot {
   height: auto !important;
-    padding: 0px 40px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: #000;
-    margin-bottom: 0px !important;
-    max-width: 1500px;
+  padding: 0px 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #000;
+  margin-bottom: 0px !important;
+  max-width: 1500px;
 }
 
 .ocg-foot a {
-    color: #ffffff4d;
-    font-size: 14px;
-    font-family: Quicksand;
+  color: #ffffff4d;
+  font-size: 14px;
+  font-family: Quicksand;
 }
 
-.container{padding:0px;}
+.container {
+  padding: 0px;
+}
 
 .title {
   font-family: Quicksand !important;
@@ -634,13 +650,13 @@ export default {
 }
 
 @media (max-width: 767px) {
-  .ocg-title  {
-margin-top: 50px;
-}
+  .ocg-title {
+    margin-top: 50px;
+  }
 
-.ocg-sub {
+  .ocg-sub {
     font-size: 20px !important;
-}
+  }
 
   .banner h2 {
     font-size: 35px;
@@ -753,7 +769,7 @@ margin-top: 50px;
   will-change: transform;
   transition: transform 250ms;
   border: none;
-  background: #8F3985 !important;
+  background: #8f3985 !important;
   font-family: Barlow;
   font-size: 22px !important;
   letter-spacing: 0px !important;
@@ -771,9 +787,9 @@ margin-top: 50px;
   margin: auto;
 }
 @media (max-width: 767px) {
-.main-block {
-  max-width: 440px;
-}
+  .main-block {
+    max-width: 440px;
+  }
   .main-block img {
     width: 100%;
   }
