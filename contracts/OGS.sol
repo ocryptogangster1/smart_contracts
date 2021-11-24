@@ -1,36 +1,40 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity 0.8.10;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 contract OCG is ERC721Enumerable, Ownable {
 	using Strings for uint256;
+	using MerkleProof for bytes32[];
 
-	string private _baseTokenURI = "https://api.ocg.city/metadata/";
-	string private _contractURI = "ipfs://QmYJeKfeHY57kGg5JHAKq2piEGyk974V4tydzbvBwsHQzf";
+	////TODO: ADD ONLYDEV MODIFIER IN SET SALE START TIME
 
-	uint256 public maxSupply = 5555;
-	uint256 public maxPresale = 3333;
+	/**
+	 * @notice Input data root, Merkle tree root for an array of (address, tokenId) pairs,
+	 *      available for minting
+	 */
+	bytes32 public root;
 
-	uint256 public pricePerTokenPresale = 50000000000000000; //0.05 ETH
-	uint256 public pricePerToken = 70000000000000000; //0.07 ETH
-
-	bool public saleLive = false;
-	bool public presaleLive = false;
-	bool public locked; //metadata lock
+	string public _contractBaseURI = "https://api.ocg.city/metadata/";
+	string public _contractURI = "ipfs://QmYJeKfeHY57kGg5JHAKq2piEGyk974V4tydzbvBwsHQzf";
 	address private devWallet;
-	string private ipfsProof;
+	uint256 public tokenPrice = 0.07 ether;
+	uint256 public pricePerTokenPresale = 0.05 ether;
+	mapping(address => uint256) public usedAddresses; //max 3 per address for whitelist
+	bool public locked; //metadata lock
+	uint256 public maxSupply = 5555;
+	uint256 public maxSupplyPresale = 3333;
 
-	mapping(address => uint256) whitelist;
+	uint256 public presaleStartTime = block.timestamp; //update to correct
+	uint256 public saleStartTime = block.timestamp; //update to correct
 
-	//should be handled only by highly trained personnel
 	modifier onlyDev() {
-		require(msg.sender == devWallet, "only dev can modify");
+		require(msg.sender == devWallet, "only dev");
 		_;
 	}
 
@@ -38,31 +42,56 @@ contract OCG is ERC721Enumerable, Ownable {
 		devWallet = msg.sender;
 	}
 
-	function presaleBuy(uint256 qty) external payable {
-		require(presaleLive, "not live - presale");
-		require(isWhitelisted(msg.sender), "not whitelisted");
-		require(qty <= 5, "no more than 5");
-		require(totalSupply() + qty <= maxPresale, "presale out of stock");
+	//whitelistBuy can buy. max 3 tokens per whitelisted address
+	function whitelistBuy(
+		uint256 qty,
+		uint256 tokenId,
+		bytes32[] calldata proof
+	) external payable {
+		require(isTokenValid(msg.sender, tokenId, proof), "invalid proof");
+		require(usedAddresses[msg.sender] + qty <= 5, "max 5 per wallet");
 		require(pricePerTokenPresale * qty == msg.value, "exact amount needed");
+		require(block.timestamp >= presaleStartTime, "not live");
+		require(totalSupply() + qty <= maxSupplyPresale, "public sale out of stock");
+
+		usedAddresses[msg.sender] += qty;
+
 		for (uint256 i = 0; i < qty; i++) {
 			_safeMint(msg.sender, totalSupply() + 1);
 		}
 	}
 
-	function publicBuy(uint256 qty) external payable {
-		require(saleLive, "not live");
-		require(qty <= 20, "no more than 20");
+	//regular public sale
+	function buy(uint256 qty) external payable {
+		require(qty <= 10, "max 10 at once");
+		require(tokenPrice * qty == msg.value, "exact amount needed");
+		require(block.timestamp >= saleStartTime, "not live");
 		require(totalSupply() + qty <= maxSupply, "public sale out of stock");
-		require(pricePerToken * qty == msg.value, "exact amount needed");
+
 		for (uint256 i = 0; i < qty; i++) {
 			_safeMint(msg.sender, totalSupply() + 1);
 		}
+	}
+
+	function isTokenValid(
+		address _to,
+		uint256 _tokenId,
+		bytes32[] memory _proof
+	) public view returns (bool) {
+		// construct Merkle tree leaf from the inputs supplied
+		bytes32 leaf = keccak256(abi.encodePacked(_to, _tokenId));
+
+		// verify the proof supplied, and return the verification result
+		return _proof.verify(root, leaf);
+	}
+
+	function setMerkleRoot(bytes32 _root) external onlyDev {
+		root = _root;
 	}
 
 	// admin can mint them for giveaways, airdrops etc
-	function adminMint(uint256 qty, address to) public onlyOwner {
-		require(qty > 0, "minimum 1 token");
-		require(qty <= 20, "no more than 20");
+	function adminMint(uint256 qty, address to) external onlyOwner {
+		require(qty <= 10, "no more than 10");
 		require(totalSupply() + qty <= maxSupply, "out of stock");
 		for (uint256 i = 0; i < qty; i++) {
 			_safeMint(to, totalSupply() + 1);
@@ -101,15 +130,15 @@ contract OCG is ERC721Enumerable, Ownable {
 
 	function tokenURI(uint256 _tokenId) public view override returns (string memory) {
 		require(_exists(_tokenId), "ERC721Metadata: URI query for nonexistent token");
-		return string(abi.encodePacked(_baseTokenURI, _tokenId.toString(), ".json"));
+		return string(abi.encodePacked(_contractBaseURI, _tokenId.toString(), ".json"));
 	}
 
-	function setBaseURI(string memory newBaseURI) public onlyDev {
+	function setBaseURI(string memory newBaseURI) external onlyDev {
 		require(!locked, "locked functions");
-		_baseTokenURI = newBaseURI;
+		_contractBaseURI = newBaseURI;
 	}
 
-	function setContractURI(string memory newuri) public onlyDev {
+	function setContractURI(string memory newuri) external onlyDev {
 		require(!locked, "locked functions");
 		_contractURI = newuri;
 	}
@@ -123,69 +152,46 @@ contract OCG is ERC721Enumerable, Ownable {
 		payable(msg.sender).transfer(address(this).balance);
 	}
 
-	function reclaimERC20(IERC20 erc20Token) public onlyOwner {
+	function reclaimERC20(IERC20 erc20Token) external onlyOwner {
 		erc20Token.transfer(msg.sender, erc20Token.balanceOf(address(this)));
 	}
 
-	function togglePresaleStatus() external onlyOwner {
-		presaleLive = !presaleLive;
-	}
-
-	function togglePublicSaleStatus() external onlyOwner {
-		saleLive = !saleLive;
-	}
-
-	function changePricePresale(uint256 newPrice) external onlyOwner {
-		pricePerTokenPresale = newPrice;
-	}
-
-	function changePricePublicSale(uint256 newPrice) external onlyOwner {
-		pricePerToken = newPrice;
-	}
-
-	function changeMaxPresale(uint256 _newMaxPresale) external onlyOwner {
-		maxPresale = _newMaxPresale;
-	}
-
-	function setProvenance(string memory _ipfsProvenance) external onlyDev {
-		bytes memory tempEmptyStringTest = bytes(ipfsProof);
-		require(tempEmptyStringTest.length == 0, "ipfsProof already set");
-		ipfsProof = _ipfsProvenance;
-	}
-
-	function decreaseMaxSupply(uint256 newMaxSupply) external onlyOwner {
-		require(newMaxSupply < maxSupply, "you can only decrease it");
-		maxSupply = newMaxSupply;
-	}
-
-	// and for the eternity!
-	function lockMetadata() external onlyOwner {
-		locked = true;
-	}
-
-	function batchAddToWhitelist(address[] memory addresses) external onlyOwner {
-		require(addresses.length <= 50, "max 50 addresses");
-		for (uint256 i = 0; i < addresses.length; i++) {
-			whitelist[addresses[i]] = 1;
-		}
-	}
-
-	function whitelistRemove(address _address) public onlyOwner {
-		whitelist[_address] = 1;
-	}
-
-	function isWhitelisted(address _address) public view returns (bool) {
-		if (whitelist[_address] == 1) {
-			return true;
-		}
-		return false;
-	}
-
-	function reclaimERC721(IERC721 erc721Token, uint256 id) public onlyOwner {
+	function reclaimERC721(IERC721 erc721Token, uint256 id) external onlyOwner {
 		erc721Token.safeTransferFrom(address(this), msg.sender, id);
 	}
 
-	function reclaimERC1155(IERC1155 erc1155Token, uint256 id) public onlyOwner {
+	function reclaimERC1155(IERC1155 erc1155Token, uint256 id) external onlyOwner {
 		erc1155Token.safeTransferFrom(address(this), msg.sender, id, 1, "");
+	}
+
+	//in unix
+	//TODO: ADD ONLYDEV MODIFIER
+	function setPresaleStartTime(uint256 _presaleStartTime) external {
+		presaleStartTime = _presaleStartTime;
+	}
+
+	//in unix
+	//TODO: ADD ONLYDEV MODIFIER
+	function setSaleStartTime(uint256 _saleStartTime) external {
+		saleStartTime = _saleStartTime;
+	}
+
+	function changePricePerToken(uint256 newPrice) external onlyOwner {
+		tokenPrice = newPrice;
+	}
+
+	function decreaseMaxSupply(uint256 newMaxSupply) external onlyOwner {
+		require(newMaxSupply < maxSupply, "decrease only");
+		maxSupply = newMaxSupply;
+	}
+
+	function decreaseMaxPresaleSupply(uint256 newMaxPresaleSupply) external onlyOwner {
+		require(newMaxPresaleSupply < maxSupplyPresale, "decrease only");
+		maxSupplyPresale = newMaxPresaleSupply;
+	}
+
+	// and for the eternity!
+	function lockMetadata() external onlyDev {
+		locked = true;
 	}
 }

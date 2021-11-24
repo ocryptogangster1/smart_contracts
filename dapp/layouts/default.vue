@@ -9,18 +9,16 @@
     >
       <v-toolbar-title>
         <nuxt-link style="text-decoration: none" to="/">
-          <img src="/images/logo.png" style="max-height: 120px" alt="logo png" />
+          <img
+            src="/images/logo.png"
+            style="max-height: 120px"
+            alt="logo png"
+          />
         </nuxt-link>
       </v-toolbar-title>
 
       <div class="social-btns">
-                      <v-btn
-          href="https://ocg.city"
-          target="_blank"
-          fab
-          text
-          redtext
-        >
+        <v-btn href="https://ocg.city" target="_blank" fab text redtext>
           <v-icon>mdi-home</v-icon>
         </v-btn>
         <v-btn
@@ -42,17 +40,24 @@
         >
           <v-icon>mdi-discord</v-icon>
         </v-btn>
-      </div>
 
-      <kbd class="ma-5 orange--text pa-2" v-if="showNonMainnetWarning">
-        You are not connected to Ethereum Mainnet!
-      </kbd>
+        <v-btn large class="green" text @click="metamaskButtonClicked()">
+          {{ walletBtnText }}
+        </v-btn>
+      </div>
     </v-app-bar>
 
     <v-main>
       <nuxt />
     </v-main>
 
+    <v-footer v-if="showNonMainnetWarning" color="transparent" app>
+      <v-card class="flex" flat>
+        <v-card-text class="red white--text text-center">
+          <strong>Warning!!</strong> Not connected to Ethereum Mainnet
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 <script>
@@ -83,7 +88,6 @@ export default {
       const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
       await provider.send('eth_requestAccounts', [])
       this.signer = provider.getSigner()
-
       this.provider = 'web3'
       this.ethers = new ethers.providers.Web3Provider(window.ethereum, 'any')
       this.ethers.on('network', (newNetwork, oldNetwork) => {
@@ -91,7 +95,6 @@ export default {
           window.location.reload()
         }
       })
-
       this.signer = this.ethers.getSigner()
       this.account = await this.signer.getAddress()
       this.balance = await this.signer.getBalance()
@@ -99,17 +102,15 @@ export default {
       this.signer = this.ethers.getSigner()
       const addr = await this.signer.getAddress()
       this.walletBtnText =
-        addr.substr(0, 10) + '...' + addr.substr(addr.length - 5, addr.length)
-
+        addr.substr(0, 7) + '...' + addr.substr(addr.length - 5, addr.length)
       window.ethereum.on('accountsChanged', (accounts) => {
         if (accounts.length < 1) return
-
         this.walletBtnText =
-          accounts[0].substr(0, 10) +
+          accounts[0].substr(0, 7) +
           '...' +
           accounts[0].substr(accounts[0].length - 5, accounts[0].length)
       })
-
+      localStorage.setItem('wallet_text', this.walletBtnText)
       const { chainId } = await this.ethers.getNetwork()
       if (chainId !== 1) {
         this.showNonMainnetWarning = true
@@ -168,7 +169,7 @@ h1 {
 
 ::v-deep .social-btns i {
   font-size: 28px !important;
-    color: #0a1715 !important;
+  color: #0a1715 !important;
 }
 
 .logo-img {

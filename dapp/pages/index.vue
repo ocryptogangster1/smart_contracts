@@ -1,146 +1,163 @@
 <template>
   <v-container>
-    <div class="ocg-main-content">
-      <div class="main-block">
-        <p class="ocg-title">MINT NOW</p>
-        <p class="title">
-          OCGs have taken up the metaverse now. <strong>5,555 NFTs</strong> and
-          no one is alike. Get yours now.
-        </p>
-        <p class="ocg-sub">
-          Price: <strong>0.07 ETH</strong> &#124; Amount:
-          <strong>5x Mint Max</strong>
-        </p>
+    <div class="main-block">
+      <p class="title">
+        <span style="color: #c30f16">OCGs</span>
+        have taken up the metaverse now. <strong>5,555 NFTs</strong> and no one
+        is alike. Get yours now.
+      </p>
 
-        <p
-          v-if="totalMinted && totalMinted > 300"
-          class="display-1 ma-5 subtitle text-xs-center justify-center"
-          style="text-align: center; font-weight: bold"
-        >
-          <br /><br />
-          <span class="display-3 glow" style="font-weight: bold"
-            >FLASH SALE SOLD OUT!
-          </span>
-          <br />
-          <br />
-          Thank you for participating!<br /><br />
-        </p>
-
-        <v-card
-          style="text-align: center"
-          class="pa-5 ma-5 text-xs-center justify-center"
-          v-if="
-            totalMinted < 7777 &&
-            !txHash &&
-            (isPresaleActive === 1 || isFlashActive === 1 || isSaleActive === 1)
-          "
-          elevation="0"
-        >
-          <div class="search-form__row text-xs-center justify-center">
-            <v-form lazy-validation>
-              <div>
-                <div class="sel-btn">
-                  <p>Quantity</p>
-                  <v-select
-                    :items="Array.from({ length: 5 }, (_, i) => i + 1)"
-                    class="quantity-input text-center"
-                    label="Qty"
-                    v-model="amount"
-                    solo
-                    required
-                  >
-                    <template slot="selection" slot-scope="{ item }">
-                      <span class="mx-auto qty-amount">
-                        {{ item }}
-                      </span>
-                    </template>
-                  </v-select>
-                </div>
-
-                <v-btn
-                  solo
-                  class="mint-btn"
-                  @click="
-                    errorText = ''
-                    mintBtnPressed()
-                  "
-                >
-                  GRAB ONE
-                </v-btn>
-              </div>
-            </v-form>
-          </div>
-        </v-card>
-      </div>
+      <p
+        v-if="totalMinted && totalMinted > 9900"
+        class="display-1 ma-5 subtitle text-xs-center justify-center"
+        style="text-align: center; font-weight: bold"
+      >
+        <br /><br />
+        <span class="display-3 glow" style="font-weight: bold"
+          >SOLD OUT!!
+        </span>
+        <br />
+        <br />
+        Thank you for participating!<br /><br />
+      </p>
 
       <v-card
-        v-if="txHash"
         style="text-align: center"
         class="pa-5 ma-5 text-xs-center justify-center"
-        color="#333"
+        v-if="
+          totalMinted < 9900 &&
+          !txHash &&
+          (presaleStartTime != 9999999999 || saleStartTime != 9999999999)
+        "
+        elevation="0"
       >
-        <p style="text-align: center" class="title ma-5">
-          You can check the transaction status
-          <span style="font-weight: bold"
-            ><a target="_blank" :href="`https://etherscan.io/tx/${txHash}`"
-              >here</a
-            ></span
-          >
+        <div class="search-form__row text-xs-center justify-center">
+          <v-form lazy-validation>
+            <div>
+              <div class="sel-btn">
+                <p>Quantity</p>
+                <v-select
+                  :items="Array.from({ length: 5 }, (_, i) => i + 1)"
+                  class="quantity-input text-center"
+                  label="Qty"
+                  v-model="amount"
+                  solo
+                  required
+                >
+                  <template slot="selection" slot-scope="{ item }">
+                    <span class="mx-auto qty-amount">
+                      {{ item }}
+                    </span>
+                  </template>
+                </v-select>
+              </div>
+
+              <v-btn
+                solo
+                class="mint-btn"
+                @click="
+                  errorText = ''
+                  mintBtnPressed()
+                "
+              >
+                MINT AN OCG
+              </v-btn>
+            </div>
+          </v-form>
+        </div>
+
+        <p class="caption ma-5">
+          {{ pricePerNFTWei / 100000000000000000 }} ETH / mint
         </p>
-        <p style="text-align: center">
-          In a few minutes, your NFT will show up in Opensea<br />
-          <span style="font-weight: bold">
-            <a
-              target="_blank"
-              href="https://opensea.io/collection/original-crypto-gangster"
-              >opensea.io/collection/original-crypto-gangster</a
-            >
-          </span>
-        </p>
-        <br />
       </v-card>
-
-      <v-dialog v-model="dialogError" class="ma-5 pa-5" max-width="600px">
-        <v-card class="warning">
-          <v-card-title>
-            <span>{{ errorText }}</span>
-          </v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="
-                dialogError = false
-                errorText = ''
-              "
-            >
-              EXIT
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <v-card
+        style="text-align: center"
+        class="pa-5 ma-5 text-xs-center justify-center"
+        v-else
+        elevation="0"
+      >
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </v-card>
     </div>
-    <div class="ma-5 text-xs-center justify-center ocg-foot">
-      <p>
+
+    <v-card
+      style="text-align: center"
+      class="pa-5 ma-5 text-xs-center justify-center"
+      color="#333"
+    >
+      <p class="ma-5">
         <a
+          style="color: warning"
+          :href="`https://etherscan.com/address/${contractAddress}#code`"
           target="_blank"
-          style="text-decoration: underline"
-          :href="`https://etherscan.io/address/${contractAddress}`"
-          >CONTRACT @ {{ contractAddress }}</a
+          >official smart contract</a
         >
-        <a href="https://ocg.city">&copy; Original Crypto Gangster</a>
       </p>
-    </div>
+    </v-card>
+
+    <v-card
+      v-if="txHash"
+      style="text-align: center"
+      class="pa-5 ma-5 text-xs-center justify-center"
+      color="#333"
+    >
+      <p style="text-align: center" class="title ma-5">
+        You can check the transaction status
+        <span style="font-weight: bold"
+          ><a target="_blank" :href="`https://etherscan.io/tx/${txHash}`"
+            >here</a
+          ></span
+        >
+      </p>
+      <p style="text-align: center">
+        In a few minutes, your NFT will show up in Opensea<br />
+        <span style="font-weight: bold">
+          <a target="_blank" href="https://opensea.io/collection/xxxxxxxxxxxxx"
+            >opensea.io/collection/xxxxxxxxxxxxxxxxx</a
+          >
+        </span>
+      </p>
+      <br />
+    </v-card>
+
+    <v-dialog v-model="dialogError" class="ma-5 pa-5" max-width="600px">
+      <v-card class="warning">
+        <v-card-title>
+          <span>{{ errorText }}</span>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="
+              dialogError = false
+              errorText = ''
+            "
+          >
+            EXIT
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { ethers } from 'ethers'
-import { CONTRACT_ADDR, RPC_PROVIDER, NETWORK_ID } from '../constants'
+import {
+  CONTRACT_ADDR,
+  RPC_PROVIDER,
+  NETWORK_ID,
+  WHITELISTED,
+} from '../constants'
 import { ERC721_ABI } from '../erc721_abi'
 const EthersUtils = require('ethers').utils
+import whitelistData from '../whitelist.json'
 
 export default {
   auth: false,
@@ -148,12 +165,14 @@ export default {
     return {
       id: null,
       totalMinted: null,
+      whitelist: whitelistData,
       amount: 1,
       dialogConfirmation: false,
       catID: null,
       adoptedCats: null,
       tokenID: null,
       contract: null,
+      account: null,
       contractAddress: null,
       itemPriceETH: null,
       itemPriceWei: null,
@@ -172,8 +191,11 @@ export default {
       showRandNFTs: false,
       walletAddress: null,
       maxPresale: null,
-      maxSupply: null,
-      isFlashActive: false,
+      pricePerNFTWei: 50000000000000000,
+      maxSupply: 9999,
+      maxSupplyPresale: 2000,
+      presaleStartTime: 9999999999,
+      saleStartTime: 9999999999,
       maxFlashSale: null,
     }
   },
@@ -183,9 +205,10 @@ export default {
 
     this.initialize()
 
+    this.timerOperations()
     const timer = setInterval(() => {
       this.timerOperations()
-    }, 15000)
+    }, 20000)
 
     this.$once('hook:beforeDestroy', () => {
       clearInterval(timer)
@@ -210,34 +233,45 @@ export default {
         ERC721_ABI,
         this.ethers
       )
-
-      this.timerOperations()
-      setTimeout(this.timerOperations, 5000) //TODO: move it 15 sec
     },
     async timerOperations() {
       this.totalMinted = Number(await this.contract.totalSupply())
-      this.isSaleActive = Number(await this.contract.saleLive())
-      this.isPresaleActive = Number(await this.contract.presaleLive())
-      this.maxSupply = Number(await this.contract.maxSupply())
-      this.maxPresale = Number(await this.contract.maxPresale())
+      if (this.presaleStartTime == 9999999999) {
+        //skip useless calls
+        this.presaleStartTime = Number(await this.contract.presaleStartTime())
+        this.saleStartTime = Number(await this.contract.saleStartTime())
+      }
 
-      console.log('Total minted = ', this.totalMinted)
-      console.log('isPresaleActive = ', this.isPresaleActive)
-      console.log('isSaleActive = ', this.isSaleActive)
-      console.log('maxPresale = ', this.maxPresale)
-      console.log('maxSupply = ', this.maxSupply)
+      console.log('minted = ', this.totalMinted, ' / ', this.maxSupply)
+
+      console.log('time now = ', Math.round(new Date().getTime() / 1000))
+      console.log('saleStartTime = ', this.saleStartTime)
+      console.log('presaleStartTime = ', this.presaleStartTime)
     },
 
     async mintBtnPressed() {
-      if (this.isPresaleActive === 1) {
-        console.log('redirect to presale sale buy')
-        await this.preSaleBuy(this.amount)
-      }
-      if (this.isSaleActive === 1) {
-        console.log('redirect to public sale buy')
+      let unixNow = Math.round(new Date().getTime() / 1000)
+      //if sale timer < block timestamp and minted < max total supply, public sale
+      if (this.saleStartTime < unixNow && this.totalMinted < this.maxSupply) {
+        console.log('public sale stage active')
         await this.publicSaleBuy(this.amount)
+        return
       }
+
+      //if presale time is < block timestamp & minted < maxPresale limit then trigger
+      //a whitelist presale buy
+      if (
+        this.presaleStartTime < unixNow &&
+        this.totalMinted < this.maxSupplyPresale
+      ) {
+        console.log('whitelist stage active')
+        await this.preSaleBuy(this.amount)
+        return
+      }
+
+      this.$toast.error('Please wait until presale or sale are active')
     },
+
     async preSaleBuy(quantity) {
       this.txHash = null
 
@@ -250,17 +284,40 @@ export default {
         ERC721_ABI,
         this.signer
       )
+      this.account = await this.signer.getAddress()
+
+      //WHITELIST EXPLANATION
+      //parse the generate whitelist json
+      let whitelistInfo = null
+      for (let i = 0; i < this.whitelist.length; i++) {
+        if (this.whitelist[i]['Address'] == this.account) {
+          whitelistInfo = this.whitelist[i]
+        }
+      }
+      if (!whitelistInfo) {
+        this.$toast.error(
+          'Your address ' +
+            this.account +
+            ' is not whitelisted. Please connect with the correct wallet'
+        )
+        return
+      }
 
       try {
         const gasLimit = quantity * 200000
-        this.itemPriceWei = Number(70000000000000000)
+        this.itemPriceWei = Number(this.pricePerNFTWei)
 
         const overrides = {
           value: String(Number(quantity) * Number(this.itemPriceWei)),
           gasLimit: gasLimit,
         }
 
-        const tx = await this.contract.presaleBuy(quantity, overrides)
+        const tx = await this.contract.whitelistBuy(
+          quantity,
+          whitelistInfo['TokenID'],
+          whitelistInfo['Proof'],
+          overrides
+        )
         if (tx.hash) {
           this.$toast.info('transaction submitted successfully')
         }
@@ -288,15 +345,15 @@ export default {
       )
 
       try {
-        const gasLimit = quantity * 200000
-        this.itemPriceWei = Number(80000000000000000)
+        const gasLimit = quantity * 100000
+        this.itemPriceWei = Number(this.pricePerNFTWei)
 
         const overrides = {
           value: String(Number(quantity) * Number(this.itemPriceWei)),
           gasLimit: gasLimit,
         }
 
-        const tx = await this.contract.publicBuy(quantity, overrides)
+        const tx = await this.contract.buy(quantity, overrides)
         if (tx.hash) {
           this.$toast.info('transaction submitted successfully')
         }
@@ -389,58 +446,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ocg-main-content {
-  background-image: url('/images/hero.jpeg');
-  background-size: cover;
-  background-position: center;
-  margin-top: -25px;
-  padding: 12vh 0vh !important;
-}
-
-.ocg-title {
-  font-size: 48px !important;
-  font-weight: 800;
-  font-family: Barlow;
-  color: #0a1715;
-}
-
-.ocg-sub {
-  font-family: Barlow;
-  font-weight: 600;
-  font-size: 26px !important;
-  color: #fff;
-  margin-top: 20px;
-}
-
-.ocg-foot {
-  height: auto !important;
-  padding: 0px 40px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #000;
-  margin-bottom: 0px !important;
-  max-width: 1500px;
-}
-
-.ocg-foot a {
-  color: #ffffff4d;
-  font-size: 14px;
-  font-family: Quicksand;
-}
-
-.container {
-  padding: 0px;
-}
-
-.title {
-  font-family: Quicksand !important;
-  font-weight: 500 !important;
-  color: #fff;
-  font-size: 25px !important;
-  line-height: 1.5;
-}
-
 .main-block {
   max-width: 960px;
   margin: auto;
@@ -450,6 +455,16 @@ export default {
   position: absolute;
   top: 180px;
   right: -220px;
+}
+.main-block p {
+  line-height: 1.6;
+  text-align: center;
+  font-size: 20px;
+  margin: auto;
+}
+.main-block img {
+  margin: 20px auto;
+  max-width: 520px;
 }
 
 .container {
@@ -461,7 +476,7 @@ export default {
 
 .theme--dark.v-input input,
 .theme--dark.v-input textarea {
-  color: #edb91d;
+  color: #ea700c;
 }
 
 .glow {
@@ -485,7 +500,7 @@ export default {
   font-size: 48px;
   font-family: Poppins-ExtraBold;
   padding: 18px 45px;
-  background: #346dac;
+  background: #edb91d;
   color: #000000;
   text-align: center;
   margin-left: auto;
@@ -557,16 +572,12 @@ export default {
 .sel-btn {
   display: flex;
   justify-content: space-between;
+  border: 4px dotted #edb91d;
   padding: 10px 16px;
   align-items: center;
   max-width: 242px;
   width: 100%;
   margin-right: 20px;
-  border: 4px solid #eeb903;
-  color: #000;
-  background: #edb91ecc;
-  font-family: Quicksand;
-  font-weight: 500;
 }
 
 .sel-btn p {
@@ -575,12 +586,12 @@ export default {
 }
 
 ::v-deep .v-icon {
-  color: #0a1715 !important;
+  color: #346dac !important;
 }
 
 ::v-deep .quantity-input {
   max-width: 64px;
-  border-left: 1px solid #0a1715;
+  border-left: 1px solid;
   border-radius: 0;
 }
 
@@ -599,7 +610,7 @@ export default {
 ::v-deep .quantity-input .v-select__slot .v-select__selection,
 ::v-deep .quantity-input .qty-amount,
 ::v-deep .quantity-input select {
-  color: #0a1715 !important;
+  color: #fff !important;
   text-align: center;
   font-size: 30px !important;
   right: 0 !important;
@@ -618,7 +629,7 @@ export default {
   font-weight: bold;
   height: 64px !important;
   background: transparent !important;
-  border: 6px solid #eeb902;
+  border: 6px solid #edb91d;
   text-transform: capitalize !important;
   border-radius: 0 !important;
   max-width: 342px;
@@ -650,14 +661,6 @@ export default {
 }
 
 @media (max-width: 767px) {
-  .ocg-title {
-    margin-top: 50px;
-  }
-
-  .ocg-sub {
-    font-size: 20px !important;
-  }
-
   .banner h2 {
     font-size: 35px;
     margin: auto;
@@ -714,10 +717,10 @@ export default {
 }
 .theme--dark.v-input input,
 .theme--dark.v-input textarea {
-  color: #edb91d;
+  color: #ea700c;
 }
 .glow {
-  -webkit-text-stroke: 1px #edb91d;
+  -webkit-text-stroke: 1px #9fd8a3;
   text-shadow: 0 0 15px rgb(137 246 143 / 77%), 0 0 10px transparent;
   -webkit-text-fill-color: transparent;
 }
@@ -725,7 +728,7 @@ export default {
   text-align: center;
 }
 .main-block {
-  max-width: 650px;
+  max-width: 560px;
   margin: auto;
   position: relative;
 }
@@ -735,9 +738,15 @@ export default {
   right: -220px;
 }
 .main-block p {
+  line-height: 1.6;
   text-align: center;
+  font-size: 20px;
+  margin: auto;
 }
-
+.main-block img {
+  margin: 20px auto;
+  max-width: 520px;
+}
 ::v-deep .quantity-input {
   width: 180px;
 }
@@ -760,7 +769,7 @@ export default {
   display: none;
 }
 ::v-deep .mint-btn {
-  height: 58px !important;
+  height: 48px !important;
 }
 ::v-deep .mint-btn .v-btn__content {
   color: #fff !important;
@@ -768,11 +777,6 @@ export default {
 ::v-deep .mint-btn {
   will-change: transform;
   transition: transform 250ms;
-  border: none;
-  background: #8f3985 !important;
-  font-family: Barlow;
-  font-size: 22px !important;
-  letter-spacing: 0px !important;
 }
 ::v-deep .mint-btn:hover {
   transform: translateY(-3px);
@@ -787,9 +791,6 @@ export default {
   margin: auto;
 }
 @media (max-width: 767px) {
-  .main-block {
-    max-width: 440px;
-  }
   .main-block img {
     width: 100%;
   }

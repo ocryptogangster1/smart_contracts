@@ -5,7 +5,7 @@
 //   'https://eth-mainnet.alchemyapi.io/v2/y5TNPGqpdpZWv-et4ZqfNgxQI3jpVm7P'
 
 //rinkeby
-export const CONTRACT_ADDR = '0x709483C1c64345b26ae088Eb4b00531cA2A5192d'
+export const CONTRACT_ADDR = '0xAA0D70476Fae94A8E34d64b604E42480f16b3d11'
 export const NETWORK_ID = 4
 export const RPC_PROVIDER =
   'https://eth-rinkeby.alchemyapi.io/v2/AY0xKM-ukEI7SylXUBGWdhrHcyZAyzHr'

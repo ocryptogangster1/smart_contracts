@@ -80,6 +80,20 @@ export const ERC721_ABI = [
     type: 'event',
   },
   {
+    inputs: [],
+    name: '_contractBaseURI',
+    outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: '_contractURI',
+    outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'uint256', name: 'qty', type: 'uint256' },
       { internalType: 'address', name: 'to', type: 'address' },
@@ -114,24 +128,15 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'uint256', name: '_newMaxPresale', type: 'uint256' },
-    ],
-    name: 'changeMaxPresale',
+    inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
+    name: 'buy',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
     inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
-    name: 'changePricePresale',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: 'newPrice', type: 'uint256' }],
-    name: 'changePricePublicSale',
+    name: 'changePricePerToken',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -141,6 +146,15 @@ export const ERC721_ABI = [
     name: 'contractURI',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: 'newMaxPresaleSupply', type: 'uint256' },
+    ],
+    name: 'decreaseMaxPresaleSupply',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -187,6 +201,17 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'address', name: '_to', type: 'address' },
+      { internalType: 'uint256', name: '_tokenId', type: 'uint256' },
+      { internalType: 'bytes32[]', name: '_proof', type: 'bytes32[]' },
+    ],
+    name: 'isTokenValid',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'lockMetadata',
     outputs: [],
@@ -202,14 +227,14 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'maxPresale',
+    name: 'maxSupply',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'maxSupply',
+    name: 'maxSupplyPresale',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -236,22 +261,8 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
-    name: 'presaleBuy',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
     inputs: [],
-    name: 'presaleLive',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'pricePerToken',
+    name: 'presaleStartTime',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -264,10 +275,17 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'qty', type: 'uint256' }],
-    name: 'publicBuy',
+    inputs: [
+      {
+        internalType: 'contract IERC1155',
+        name: 'erc1155Token',
+        type: 'address',
+      },
+      { internalType: 'uint256', name: 'id', type: 'uint256' },
+    ],
+    name: 'reclaimERC1155',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -280,10 +298,31 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'contract IERC721',
+        name: 'erc721Token',
+        type: 'address',
+      },
+      { internalType: 'uint256', name: 'id', type: 'uint256' },
+    ],
+    name: 'reclaimERC721',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'renounceOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'root',
+    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -311,8 +350,8 @@ export const ERC721_ABI = [
   },
   {
     inputs: [],
-    name: 'saleLive',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    name: 'saleStartTime',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -341,10 +380,26 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'bytes32', name: '_root', type: 'bytes32' }],
+    name: 'setMerkleRoot',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
-      { internalType: 'string', name: '_ipfsProvenance', type: 'string' },
+      { internalType: 'uint256', name: '_presaleStartTime', type: 'uint256' },
     ],
-    name: 'setProvenance',
+    name: 'setPresaleStartTime',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: '_saleStartTime', type: 'uint256' },
+    ],
+    name: 'setSaleStartTime',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -364,20 +419,6 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'togglePresaleStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'togglePublicSaleStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [{ internalType: 'uint256', name: 'index', type: 'uint256' }],
     name: 'tokenByIndex',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
@@ -390,6 +431,13 @@ export const ERC721_ABI = [
       { internalType: 'uint256', name: 'index', type: 'uint256' },
     ],
     name: 'tokenOfOwnerByIndex',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenPrice',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
@@ -431,6 +479,24 @@ export const ERC721_ABI = [
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'usedAddresses',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: 'qty', type: 'uint256' },
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'bytes32[]', name: 'proof', type: 'bytes32[]' },
+    ],
+    name: 'whitelistBuy',
+    outputs: [],
+    stateMutability: 'payable',
     type: 'function',
   },
   {

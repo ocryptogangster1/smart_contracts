@@ -12,7 +12,8 @@
 		"deploy:ganache": "NETWORK=ganache npx hardhat run --network ganache scripts/deploy.js",
 		"deploy:rinkeby": "NETWORK=rinkeby npx hardhat run --network rinkeby scripts/deploy.js",
 		"deploy:mainnet": "NETWORK=mainnet npx hardhat run --network mainnet scripts/deploy.js",
-		"deploy:polygon_test": "NETWORK=polygon_test npx hardhat run --network polygon_test scripts/deploy.js"
+		"deploy:polygon_test": "NETWORK=polygon_test npx hardhat run --network polygon_test scripts/deploy.js",
+		"gen_merkle": "npx hardhat run --network polygon_test scripts/gen_merkle.js"
 	},
 	"author": "https://ocg.city",
 	"license": "MIT",
@@ -20,7 +21,9 @@
 		"@openzeppelin/contracts": "^4.2.0",
 		"@truffle/hdwallet-provider": "1.4.1",
 		"dotenv": "^10.0.0",
-		"ethereumjs-util": "^7.1.0"
+		"ethereumjs-util": "^7.1.0",
+		"keccak256": "^1.0.3",
+		"merkletreejs": "^0.2.24"
 	},
 	"devDependencies": {
 		"@nomiclabs/hardhat-ethers": "^2.0.2",
