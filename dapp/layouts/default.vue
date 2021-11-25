@@ -41,7 +41,7 @@
           <v-icon>mdi-discord</v-icon>
         </v-btn>
 
-        <v-btn large class="green" text @click="metamaskButtonClicked()">
+        <v-btn large color="#8f3985" text @click="metamaskButtonClicked()">
           {{ walletBtnText }}
         </v-btn>
       </div>
