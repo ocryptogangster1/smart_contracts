@@ -67,7 +67,7 @@
         </div>
 
         <p class="caption ma-5">
-          {{ pricePerNFTWei / 100000000000000000 }} ETH / mint
+          {{ pricePerNFTWei / 1000000000000000000 }} ETH / mint
         </p>
       </v-card>
       <v-card
@@ -244,9 +244,14 @@ export default {
 
       console.log('minted = ', this.totalMinted, ' / ', this.maxSupply)
 
-      console.log('time now = ', Math.round(new Date().getTime() / 1000))
+      const unixNow = Math.round(new Date().getTime() / 1000)
+      console.log('time now = ', unixNow)
       console.log('saleStartTime = ', this.saleStartTime)
       console.log('presaleStartTime = ', this.presaleStartTime)
+
+      if (unixNow > this.saleStartTime) {
+        this.pricePerNFTWei = 70000000000000000
+      }
     },
 
     async mintBtnPressed() {
