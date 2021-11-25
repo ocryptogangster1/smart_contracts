@@ -38,7 +38,7 @@ async function main() {
 
 	console.log("Contract deployed to:", dep.address)
 
-	await sleep(45000)
+	await sleep(55000)
 	await hre.run("verify:verify", {
 		address: dep.address,
 		constructorArguments: [],

@@ -444,7 +444,6 @@ export default {
   },
 }
 </script>
-
 <style lang="scss" scoped>
 .main-block {
   max-width: 960px;
@@ -467,6 +466,83 @@ export default {
   max-width: 520px;
 }
 
+.ocg-main-content {
+  background-image: url('/images/hero.jpeg');
+  background-size: cover;
+  background-position: center;
+  margin-top: -25px;
+  padding: 12vh 0vh !important;
+}
+
+.ocg-title {
+  font-size: 48px !important;
+  font-weight: 800;
+  font-family: Barlow;
+  color: #0a1715;
+}
+
+.ocg-sub {
+  font-family: Barlow;
+  font-weight: 600;
+  font-size: 26px !important;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.ocg-foot {
+  height: auto !important;
+  padding: 0px 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #000;
+  margin-bottom: 0px !important;
+  max-width: 1500px;
+}
+
+.ocg-foot a {
+  color: #ffffff4d;
+  font-size: 14px;
+  font-family: Quicksand;
+}
+
+.ocg-info-smart-contract {
+  color: #ffffff !important;
+  font-family: Quicksand;
+  text-transform: uppercase;
+  text-decoration: underline;
+  font-weight: 600 !important;
+}
+
+.ocg-price {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  font-family: Quicksand;
+}
+
+.container {
+  padding: 0px;
+}
+
+.title {
+  font-family: Quicksand !important;
+  font-weight: 500 !important;
+  color: #fff;
+  font-size: 25px !important;
+  line-height: 1.5;
+}
+
+.main-block {
+  max-width: 960px;
+  margin: auto;
+  position: relative;
+}
+.main-block .m-right {
+  position: absolute;
+  top: 180px;
+  right: -220px;
+}
+
 .container {
   max-width: 1500px;
 }
@@ -476,7 +552,7 @@ export default {
 
 .theme--dark.v-input input,
 .theme--dark.v-input textarea {
-  color: #ea700c;
+  color: #edb91d;
 }
 
 .glow {
@@ -572,12 +648,16 @@ export default {
 .sel-btn {
   display: flex;
   justify-content: space-between;
-  border: 4px dotted #edb91d;
   padding: 10px 16px;
   align-items: center;
   max-width: 242px;
   width: 100%;
   margin-right: 20px;
+  border: 4px solid #eeb903;
+  color: #000;
+  background: #edb91ecc;
+  font-family: Quicksand;
+  font-weight: 500;
 }
 
 .sel-btn p {
@@ -586,12 +666,12 @@ export default {
 }
 
 ::v-deep .v-icon {
-  color: #346dac !important;
+  color: #0a1715 !important;
 }
 
 ::v-deep .quantity-input {
   max-width: 64px;
-  border-left: 1px solid;
+  border-left: 1px solid #0a1715;
   border-radius: 0;
 }
 
@@ -610,7 +690,7 @@ export default {
 ::v-deep .quantity-input .v-select__slot .v-select__selection,
 ::v-deep .quantity-input .qty-amount,
 ::v-deep .quantity-input select {
-  color: #fff !important;
+  color: #0a1715 !important;
   text-align: center;
   font-size: 30px !important;
   right: 0 !important;
@@ -629,7 +709,7 @@ export default {
   font-weight: bold;
   height: 64px !important;
   background: transparent !important;
-  border: 6px solid #edb91d;
+  border: 6px solid #eeb902;
   text-transform: capitalize !important;
   border-radius: 0 !important;
   max-width: 342px;
@@ -661,6 +741,13 @@ export default {
 }
 
 @media (max-width: 767px) {
+  .ocg-title {
+    margin-top: 50px;
+  }
+
+  .ocg-sub {
+    font-size: 20px !important;
+  }
   .banner h2 {
     font-size: 35px;
     margin: auto;
@@ -738,10 +825,7 @@ export default {
   right: -220px;
 }
 .main-block p {
-  line-height: 1.6;
   text-align: center;
-  font-size: 20px;
-  margin: auto;
 }
 .main-block img {
   margin: 20px auto;
@@ -769,7 +853,7 @@ export default {
   display: none;
 }
 ::v-deep .mint-btn {
-  height: 48px !important;
+  height: 58px !important;
 }
 ::v-deep .mint-btn .v-btn__content {
   color: #fff !important;
@@ -777,6 +861,11 @@ export default {
 ::v-deep .mint-btn {
   will-change: transform;
   transition: transform 250ms;
+  border: none;
+  background: #8f3985 !important;
+  font-family: Barlow;
+  font-size: 22px !important;
+  letter-spacing: 0px !important;
 }
 ::v-deep .mint-btn:hover {
   transform: translateY(-3px);
@@ -791,6 +880,9 @@ export default {
   margin: auto;
 }
 @media (max-width: 767px) {
+  .main-block {
+    max-width: 440px;
+  }
   .main-block img {
     width: 100%;
   }
