@@ -52,7 +52,7 @@ contract OCG is ERC721Enumerable, Ownable {
 		require(usedAddresses[msg.sender] + qty <= 5, "max 5 per wallet");
 		require(pricePerTokenPresale * qty == msg.value, "exact amount needed");
 		require(block.timestamp >= presaleStartTime, "not live");
-		require(totalSupply() + qty <= maxSupplyPresale, "public sale out of stock");
+		require(totalSupply() + qty <= maxSupplyPresale, "presale out of stock");
 
 		usedAddresses[msg.sender] += qty;
 
