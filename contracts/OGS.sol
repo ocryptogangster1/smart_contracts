@@ -12,8 +12,6 @@ contract OCG is ERC721Enumerable, Ownable {
 	using Strings for uint256;
 	using MerkleProof for bytes32[];
 
-	////TODO: ADD ONLYDEV MODIFIER IN SET SALE START TIME
-
 	/**
 	 * @notice Input data root, Merkle tree root for an array of (address, tokenId) pairs,
 	 *      available for minting
@@ -21,17 +19,16 @@ contract OCG is ERC721Enumerable, Ownable {
 	bytes32 public root;
 
 	string public _contractBaseURI = "https://api.ocg.city/metadata/";
-	string public _contractURI = "ipfs://QmYJeKfeHY57kGg5JHAKq2piEGyk974V4tydzbvBwsHQzf";
+	string public _contractURI = "https://to.wtf/contract_uri/ocg/contract_uri.json";
 	address private devWallet;
 	uint256 public tokenPrice = 0.07 ether;
 	uint256 public pricePerTokenPresale = 0.05 ether;
-	mapping(address => uint256) public usedAddresses; //max 3 per address for whitelist
 	bool public locked; //metadata lock
 	uint256 public maxSupply = 5555;
 	uint256 public maxSupplyPresale = 3333;
 
-	uint256 public presaleStartTime = block.timestamp; //update to correct
-	uint256 public saleStartTime = block.timestamp; //update to correct
+	uint256 public presaleStartTime = 1638295200; //update to correct
+	uint256 public saleStartTime = 1638381600; //update to correct
 
 	modifier onlyDev() {
 		require(msg.sender == devWallet, "only dev");
@@ -42,19 +39,16 @@ contract OCG is ERC721Enumerable, Ownable {
 		devWallet = msg.sender;
 	}
 
-	//whitelistBuy can buy. max 3 tokens per whitelisted address
+	//whitelistBuy can buy
 	function whitelistBuy(
 		uint256 qty,
 		uint256 tokenId,
 		bytes32[] calldata proof
 	) external payable {
 		require(isTokenValid(msg.sender, tokenId, proof), "invalid proof");
-		require(usedAddresses[msg.sender] + qty <= 5, "max 5 per wallet");
 		require(pricePerTokenPresale * qty == msg.value, "exact amount needed");
 		require(block.timestamp >= presaleStartTime, "not live");
 		require(totalSupply() + qty <= maxSupplyPresale, "presale out of stock");
-
-		usedAddresses[msg.sender] += qty;
 
 		for (uint256 i = 0; i < qty; i++) {
 			_safeMint(msg.sender, totalSupply() + 1);
@@ -165,14 +159,12 @@ contract OCG is ERC721Enumerable, Ownable {
 	}
 
 	//in unix
-	//TODO: ADD ONLYDEV MODIFIER
-	function setPresaleStartTime(uint256 _presaleStartTime) external {
+	function setPresaleStartTime(uint256 _presaleStartTime) external onlyOwner {
 		presaleStartTime = _presaleStartTime;
 	}
 
 	//in unix
-	//TODO: ADD ONLYDEV MODIFIER
-	function setSaleStartTime(uint256 _saleStartTime) external {
+	function setSaleStartTime(uint256 _saleStartTime) external onlyOwner {
 		saleStartTime = _saleStartTime;
 	}
 

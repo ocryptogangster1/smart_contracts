@@ -73,13 +73,14 @@
       <v-card
         style="text-align: center"
         class="pa-5 ma-5 text-xs-center justify-center"
-        v-else
+        v-if="isLoading"
         elevation="0"
       >
         <v-progress-circular
           indeterminate
           color="primary"
         ></v-progress-circular>
+        <p class="ma-3 caption grey--text">{{ loadingText }}</p>
       </v-card>
     </div>
 
@@ -193,6 +194,8 @@ export default {
       maxPresale: null,
       pricePerNFTWei: 50000000000000000,
       maxSupply: 9999,
+      isLoading: false,
+      loadingText: 'loading...',
       maxSupplyPresale: 2000,
       presaleStartTime: 9999999999,
       saleStartTime: 9999999999,
@@ -200,6 +203,8 @@ export default {
     }
   },
   async mounted() {
+    this.isLoading = true
+    this.loadingText = 'client synchronization status... pending'
     this.id = this.$route.query.id
     this.contractAddress = CONTRACT_ADDR
 
@@ -251,6 +256,28 @@ export default {
 
       if (unixNow > this.saleStartTime) {
         this.pricePerNFTWei = 70000000000000000
+      }
+      this.isLoading = false
+    },
+
+    async onTxHashLogic(txHash) {
+      this.$toast.info('transaction submitted successfully')
+      this.loadingText = 'waiting for miners to mine it...'
+      await this.ethers.waitForTransaction(txHash)
+
+      try {
+        let receipt = await this.ethers.getTransactionReceipt(txHash)
+        if (receipt === null) {
+          console.log(`Failed to get tx receipt....`)
+          this.isLoading = false
+        }
+        console.log('receipt :>> ', receipt)
+        console.log(`Receipt confirmations:`, receipt.confirmations)
+        this.$toast.info('transaction was minted successfully')
+        this.isLoading = false
+        this.txHash = txHash
+      } catch (er) {
+        console.log(`Receipt error:`, er)
       }
     },
 
@@ -324,9 +351,8 @@ export default {
           overrides
         )
         if (tx.hash) {
-          this.$toast.info('transaction submitted successfully')
+          await this.onTxHashLogic(tx.hash)
         }
-        this.txHash = tx.hash
       } catch (err) {
         if (err.message.includes('denied')) {
           this.$toast.info('you canceled the transaction')
@@ -360,9 +386,8 @@ export default {
 
         const tx = await this.contract.buy(quantity, overrides)
         if (tx.hash) {
-          this.$toast.info('transaction submitted successfully')
+          await this.onTxHashLogic(tx.hash)
         }
-        this.txHash = tx.hash
       } catch (err) {
         if (err.message.includes('denied')) {
           this.$toast.info('you canceled the transaction')
