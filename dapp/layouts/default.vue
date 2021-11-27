@@ -41,7 +41,13 @@
           <v-icon>mdi-discord</v-icon>
         </v-btn>
 
-        <v-btn large color="#8f3985" text @click="metamaskButtonClicked()">
+        <v-btn
+          large
+          class="ocg-wallet-btn"
+          color="#ffffff"
+          text
+          @click="metamaskButtonClicked()"
+        >
           {{ walletBtnText }}
         </v-btn>
       </div>
@@ -178,5 +184,11 @@ h1 {
   position: absolute;
   bottom: 0;
   z-index: 0;
+}
+
+.ocg-wallet-btn {
+  background-color: #8f3985;
+  border-radius: 0px;
+  font-weight: 800 !important;
 }
 </style>

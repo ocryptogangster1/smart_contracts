@@ -1,150 +1,153 @@
 <template>
   <v-container>
-    <div class="main-block">
-      <p class="title">
-        <span style="color: #c30f16">OCGs</span>
-        have taken up the metaverse now. <strong>5,555 NFTs</strong> and no one
-        is alike. Get yours now.
-      </p>
+    <div class="ocg-main-content">
+      <div class="main-block">
+        <p class="ocg-title">MINT NOW</p>
+        <p class="title">
+          OCGs have taken up the metaverse now. <strong>5,555 NFTs</strong> and
+          no one is alike. Get yours now.
+        </p>
+        <p
+          v-if="totalMinted && totalMinted > 9900"
+          class="display-1 ma-5 subtitle text-xs-center justify-center"
+          style="text-align: center; font-weight: bold"
+        >
+          <br /><br />
+          <span class="display-3 glow" style="font-weight: bold"
+            >SOLD OUT!!
+          </span>
+          <br />
+          <br />
+          Thank you for participating!<br /><br />
+        </p>
 
-      <p
-        v-if="totalMinted && totalMinted > 9900"
-        class="display-1 ma-5 subtitle text-xs-center justify-center"
-        style="text-align: center; font-weight: bold"
-      >
-        <br /><br />
-        <span class="display-3 glow" style="font-weight: bold"
-          >SOLD OUT!!
-        </span>
-        <br />
-        <br />
-        Thank you for participating!<br /><br />
-      </p>
+        <v-card
+          style="text-align: center"
+          class="pa-5 ma-5 text-xs-center justify-center"
+          v-if="totalMinted < 9900 && !txHash && showMintForm"
+          elevation="0"
+        >
+          <div class="search-form__row text-xs-center justify-center">
+            <v-form lazy-validation>
+              <div>
+                <div class="sel-btn">
+                  <p>Quantity</p>
+                  <v-select
+                    :items="Array.from({ length: 5 }, (_, i) => i + 1)"
+                    class="quantity-input text-center"
+                    label="Qty"
+                    v-model="amount"
+                    solo
+                    required
+                  >
+                    <template slot="selection" slot-scope="{ item }">
+                      <span class="mx-auto qty-amount">
+                        {{ item }}
+                      </span>
+                    </template>
+                  </v-select>
+                </div>
+
+                <v-btn
+                  solo
+                  class="mint-btn"
+                  @click="
+                    errorText = ''
+                    mintBtnPressed()
+                  "
+                >
+                  MINT AN OCG
+                </v-btn>
+              </div>
+            </v-form>
+          </div>
+
+          <p class="caption ma-5 ocg-price">
+            {{ pricePerNFTWei / 1000000000000000000 }} ETH / mint
+          </p>
+        </v-card>
+        <v-card
+          style="text-align: center"
+          class="pa-5 ma-5 text-xs-center justify-center"
+          v-if="isLoading"
+          elevation="0"
+        >
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
+          <p class="ma-3 caption white--text">{{ loadingText }}</p>
+        </v-card>
+      </div>
 
       <v-card
         style="text-align: center"
         class="pa-5 ma-5 text-xs-center justify-center"
-        v-if="
-          totalMinted < 9900 &&
-          !txHash &&
-          (presaleStartTime != 9999999999 || saleStartTime != 9999999999)
-        "
-        elevation="0"
+        color="#333"
       >
-        <div class="search-form__row text-xs-center justify-center">
-          <v-form lazy-validation>
-            <div>
-              <div class="sel-btn">
-                <p>Quantity</p>
-                <v-select
-                  :items="Array.from({ length: 5 }, (_, i) => i + 1)"
-                  class="quantity-input text-center"
-                  label="Qty"
-                  v-model="amount"
-                  solo
-                  required
-                >
-                  <template slot="selection" slot-scope="{ item }">
-                    <span class="mx-auto qty-amount">
-                      {{ item }}
-                    </span>
-                  </template>
-                </v-select>
-              </div>
-
-              <v-btn
-                solo
-                class="mint-btn"
-                @click="
-                  errorText = ''
-                  mintBtnPressed()
-                "
-              >
-                MINT AN OCG
-              </v-btn>
-            </div>
-          </v-form>
-        </div>
-
-        <p class="caption ma-5">
-          {{ pricePerNFTWei / 1000000000000000000 }} ETH / mint
+        <p class="ma-5">
+          <a
+            style="color: warning"
+            class="ocg-info-smart-contract"
+            :href="`https://etherscan.com/address/${contractAddress}#code`"
+            target="_blank"
+            >official smart contract</a
+          >
         </p>
       </v-card>
+
       <v-card
+        v-if="txHash"
         style="text-align: center"
         class="pa-5 ma-5 text-xs-center justify-center"
-        v-if="isLoading"
-        elevation="0"
+        color="#333"
       >
-        <v-progress-circular
-          indeterminate
-          color="primary"
-        ></v-progress-circular>
-        <p class="ma-3 caption grey--text">{{ loadingText }}</p>
+        <p style="text-align: center" class="title ma-5">
+          You can check the transaction status
+          <span style="font-weight: bold"
+            ><a target="_blank" :href="`https://etherscan.io/tx/${txHash}`"
+              >here</a
+            ></span
+          >
+        </p>
+        <p style="text-align: center">
+          In a few minutes, your NFT will show up in Opensea<br />
+          <span style="font-weight: bold">
+            <a
+              target="_blank"
+              href="https://opensea.io/collection/xxxxxxxxxxxxx"
+              >opensea.io/collection/xxxxxxxxxxxxxxxxx</a
+            >
+          </span>
+        </p>
+        <br />
       </v-card>
+
+      <v-dialog v-model="dialogError" class="ma-5 pa-5" max-width="600px">
+        <v-card class="warning">
+          <v-card-title>
+            <span>{{ errorText }}</span>
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="
+                dialogError = false
+                errorText = ''
+              "
+            >
+              EXIT
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
-
-    <v-card
-      style="text-align: center"
-      class="pa-5 ma-5 text-xs-center justify-center"
-      color="#333"
-    >
-      <p class="ma-5">
-        <a
-          style="color: warning"
-          :href="`https://etherscan.com/address/${contractAddress}#code`"
-          target="_blank"
-          >official smart contract</a
-        >
-      </p>
-    </v-card>
-
-    <v-card
-      v-if="txHash"
-      style="text-align: center"
-      class="pa-5 ma-5 text-xs-center justify-center"
-      color="#333"
-    >
-      <p style="text-align: center" class="title ma-5">
-        You can check the transaction status
-        <span style="font-weight: bold"
-          ><a target="_blank" :href="`https://etherscan.io/tx/${txHash}`"
-            >here</a
-          ></span
-        >
-      </p>
-      <p style="text-align: center">
-        In a few minutes, your NFT will show up in Opensea<br />
-        <span style="font-weight: bold">
-          <a target="_blank" href="https://opensea.io/collection/xxxxxxxxxxxxx"
-            >opensea.io/collection/xxxxxxxxxxxxxxxxx</a
-          >
-        </span>
-      </p>
-      <br />
-    </v-card>
-
-    <v-dialog v-model="dialogError" class="ma-5 pa-5" max-width="600px">
-      <v-card class="warning">
-        <v-card-title>
-          <span>{{ errorText }}</span>
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="
-              dialogError = false
-              errorText = ''
-            "
-          >
-            EXIT
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <div class="ma-5 text-xs-center justify-center ocg-foot">
+      <p><a href="https://ocg.city">&copy; Original Crypto Gangster</a></p>
+    </div>
   </v-container>
 </template>
 
@@ -174,6 +177,7 @@ export default {
       tokenID: null,
       contract: null,
       account: null,
+      showMintForm: false,
       contractAddress: null,
       itemPriceETH: null,
       itemPriceWei: null,
@@ -253,6 +257,10 @@ export default {
       console.log('time now = ', unixNow)
       console.log('saleStartTime = ', this.saleStartTime)
       console.log('presaleStartTime = ', this.presaleStartTime)
+
+      if (unixNow > this.saleStartTime || unixNow > this.presaleStartTime) {
+        this.showMintForm = true
+      }
 
       if (unixNow > this.saleStartTime) {
         this.pricePerNFTWei = 70000000000000000
@@ -475,6 +483,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.container {
+  max-width: 100% !important;
+}
+
 .main-block {
   max-width: 960px;
   margin: auto;
@@ -527,7 +539,6 @@ export default {
   align-items: center;
   background: #000;
   margin-bottom: 0px !important;
-  max-width: 1500px;
 }
 
 .ocg-foot a {
@@ -573,9 +584,6 @@ export default {
   right: -220px;
 }
 
-.container {
-  max-width: 1500px;
-}
 .black-text {
   color: black i !important;
 }
@@ -693,6 +701,10 @@ export default {
 .sel-btn p {
   font-size: 17px;
   margin-bottom: 0;
+}
+
+.v-sheet.v-card {
+  box-shadow: none !important;
 }
 
 ::v-deep .v-icon {
