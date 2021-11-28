@@ -300,14 +300,14 @@ export default {
 
       //if presale time is < block timestamp & minted < maxPresale limit then trigger
       //a whitelist presale buy
-      if (
-        this.presaleStartTime < unixNow &&
-        this.totalMinted < this.maxSupplyPresale
-      ) {
-        console.log('whitelist stage active')
-        await this.preSaleBuy(this.amount)
-        return
-      }
+      // if (
+      //   this.presaleStartTime < unixNow &&
+      //   this.totalMinted < this.maxSupplyPresale
+      // ) {
+      //   console.log('whitelist stage active')
+      //   await this.preSaleBuy(this.amount)
+      //   return
+      // }
 
       this.$toast.error('Please wait until presale or sale are active')
     },
