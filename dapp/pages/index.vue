@@ -113,10 +113,8 @@
         <p style="text-align: center">
           In a few minutes, your NFT will show up in Opensea<br />
           <span style="font-weight: bold">
-            <a
-              target="_blank"
-              href="https://opensea.io/collection/xxxxxxxxxxxxx"
-              >opensea.io/collection/xxxxxxxxxxxxxxxxx</a
+            <a target="_blank" href="https://opensea.io/collection/ocg"
+              >https://opensea.io/collection/ocg</a
             >
           </span>
         </p>
