@@ -263,7 +263,7 @@ export default {
       }
 
       if (unixNow > this.saleStartTime) {
-        this.pricePerNFTWei = 70000000000000000
+        this.pricePerNFTWei = 50000000000000000
       }
       this.isLoading = false
     },
