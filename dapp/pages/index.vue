@@ -342,7 +342,7 @@ export default {
       }
 
       try {
-        const gasLimit = quantity * 200000
+        const gasLimit = quantity * 250000
         this.itemPriceWei = Number(this.pricePerNFTWei)
 
         const overrides = {
