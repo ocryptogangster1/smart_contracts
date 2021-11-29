@@ -2,7 +2,7 @@
 export const CONTRACT_ADDR = '0xbD47517d558757eb981Fe241dC53C54836cd6D4A'
 export const NETWORK_ID = 1
 export const RPC_PROVIDER =
-  'https://eth-mainnet.alchemyapi.io/v2/y5TNPGqpdpZWv-et4ZqfNgxQI3jpVm7P'
+  'https://eth-mainnet.alchemyapi.io/v2/oVryicy8q6o6iFj2sv_DZHR8KIUNDVYu'
 
 //rinkeby
 // export const CONTRACT_ADDR = '0xB660Ab3a9C265a82A2effE4D9dabEaA7837c6706'
