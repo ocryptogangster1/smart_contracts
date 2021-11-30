@@ -46,6 +46,14 @@ module.exports = {
 			timeout: 15000,
 			accounts: [process.env.PRIVATE_KEY],
 		},
+		polygon: {
+			url: process.env.MATIC_RPC,
+			network_id: 137,
+			gas: 4500000,
+			gasPrice: 30000000000, //30 gwei
+			timeout: 25000,
+			accounts: [process.env.PRIVATE_KEY],
+		},
 		polygon_test: {
 			url: process.env.MATIC_RPC_TEST,
 			network_id: 80001,
@@ -67,6 +75,6 @@ module.exports = {
 		timeout: 25000,
 	},
 	etherscan: {
-		apiKey: process.env.ETHERSCAN_KEY,
+		apiKey: process.env.POLYSCAN_KEY,
 	},
 }

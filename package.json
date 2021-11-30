@@ -13,11 +13,17 @@
 		"deploy:rinkeby": "NETWORK=rinkeby npx hardhat run --network rinkeby scripts/deploy.js",
 		"deploy:mainnet": "NETWORK=mainnet npx hardhat run --network mainnet scripts/deploy.js",
 		"deploy:polygon_test": "NETWORK=polygon_test npx hardhat run --network polygon_test scripts/deploy.js",
-		"gen_merkle": "npx hardhat run --network polygon_test scripts/gen_merkle.js"
+		"gen_merkle": "npx hardhat run --network polygon_test scripts/gen_merkle.js",
+		"deploy_giveaway:polygon": "NETWORK=polygon npx hardhat run --network polygon scripts/deploy_giveaway.js",
+		"deploy_giveaway:polygon_test": "NETWORK=polygon_test npx hardhat run --network polygon_test scripts/deploy_giveaway.js",
+		"shuffle_onchain:polygon": "NETWORK=polygon npx hardhat run --network polygon scripts/shuffle_onchain.js",
+		"shuffle_onchain:polygon_test": "NETWORK=polygon_test npx hardhat run --network polygon_test scripts/shuffle_onchain.js",
+		"retrive_shuffled:polygon": "NETWORK=polygon npx hardhat run --network polygon scripts/retrive_shuffled.js"
 	},
 	"author": "https://ocg.city",
 	"license": "MIT",
 	"dependencies": {
+		"@chainlink/contracts": "^0.2.2",
 		"@openzeppelin/contracts": "^4.2.0",
 		"@truffle/hdwallet-provider": "1.4.1",
 		"dotenv": "^10.0.0",
@@ -26,6 +32,7 @@
 		"merkletreejs": "^0.2.24"
 	},
 	"devDependencies": {
+		"csv-write-stream": "^2.0.0",
 		"@nomiclabs/hardhat-ethers": "^2.0.2",
 		"@nomiclabs/hardhat-etherscan": "^2.1.4",
 		"@nomiclabs/hardhat-waffle": "^2.0.1",

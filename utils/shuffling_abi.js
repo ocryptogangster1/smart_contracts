@@ -1,0 +1,212 @@
+const SHUFFLING_ABI = [
+	{
+		inputs: [
+			{ internalType: "address", name: "_vrfCoordinator", type: "address" },
+			{ internalType: "address", name: "_linkToken", type: "address" },
+			{ internalType: "bytes32", name: "_keyHash", type: "bytes32" },
+			{ internalType: "uint256", name: "_fee", type: "uint256" },
+		],
+		stateMutability: "nonpayable",
+		type: "constructor",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: "string", name: "proof", type: "string" },
+			{ indexed: false, internalType: "uint256", name: "drawID", type: "uint256" },
+		],
+		name: "IPFSProofAdded",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: true, internalType: "address", name: "previousOwner", type: "address" },
+			{ indexed: true, internalType: "address", name: "newOwner", type: "address" },
+		],
+		name: "OwnershipTransferred",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: "bytes32", name: "requestId", type: "bytes32" },
+			{ indexed: false, internalType: "uint256", name: "drawID", type: "uint256" },
+			{ indexed: false, internalType: "uint256", name: "result", type: "uint256" },
+		],
+		name: "RandomLanded",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: "bytes32", name: "requestId", type: "bytes32" },
+			{ indexed: false, internalType: "address", name: "roller", type: "address" },
+		],
+		name: "RandomRequested",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: "uint256", name: "randomResult", type: "uint256" },
+			{ indexed: false, internalType: "uint256", name: "winningNumber", type: "uint256" },
+		],
+		name: "Winner",
+		type: "event",
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{ indexed: false, internalType: "uint256", name: "randomResult", type: "uint256" },
+			{ indexed: false, internalType: "uint256[]", name: "expandedResult", type: "uint256[]" },
+		],
+		name: "Winners",
+		type: "event",
+	},
+	{
+		inputs: [{ internalType: "string", name: "ipfsHash", type: "string" }],
+		name: "addIPFSProof",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [
+			{ internalType: "uint256", name: "", type: "uint256" },
+			{ internalType: "uint256", name: "", type: "uint256" },
+		],
+		name: "expandedResults",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "getRandomNumber",
+		outputs: [{ internalType: "bytes32", name: "requestId", type: "bytes32" }],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		name: "ipfsProof",
+		outputs: [{ internalType: "string", name: "", type: "string" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "nftMaxSupply",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "owner",
+		outputs: [{ internalType: "address", name: "", type: "address" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{ internalType: "uint256", name: "numWinners", type: "uint256" },
+			{ internalType: "uint256", name: "drawId", type: "uint256" },
+			{ internalType: "uint256", name: "totalEntries", type: "uint256" },
+		],
+		name: "pickManyWinners",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [
+			{ internalType: "uint256", name: "drawId", type: "uint256" },
+			{ internalType: "uint256", name: "totalEntries", type: "uint256" },
+		],
+		name: "pickOneWinner",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		name: "randomResults",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{ internalType: "bytes32", name: "requestId", type: "bytes32" },
+			{ internalType: "uint256", name: "randomness", type: "uint256" },
+		],
+		name: "rawFulfillRandomness",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "renounceOwnership",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+		name: "requestIdToDrawIndex",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{ internalType: "uint256", name: "drawID", type: "uint256" },
+			{ internalType: "uint256", name: "start", type: "uint256" },
+			{ internalType: "uint256", name: "limit", type: "uint256" },
+		],
+		name: "shuffleNFTs",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		name: "shuffledNFTs",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "totalDraws",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+		name: "transferOwnership",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		name: "winnerResults",
+		outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "withdrawLink",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+]
+
+module.exports = SHUFFLING_ABI
