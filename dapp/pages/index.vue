@@ -85,6 +85,7 @@
         class="pa-5 ma-5 text-xs-center justify-center"
         color="#333"
       >
+        <v-btn outlined to="/name" nuxt> Name Your Gangster</v-btn>
         <p class="ma-5">
           <a
             style="color: warning"
