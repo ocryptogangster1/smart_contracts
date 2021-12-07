@@ -195,7 +195,7 @@ export default {
       showRandNFTs: false,
       walletAddress: null,
       maxPresale: null,
-      pricePerNFTWei: 50000000000000000,
+      pricePerNFTWei: 0,
       maxSupply: 9999,
       isLoading: false,
       loadingText: 'loading...',
@@ -262,7 +262,7 @@ export default {
       }
 
       if (unixNow > this.saleStartTime) {
-        this.pricePerNFTWei = 50000000000000000
+        this.pricePerNFTWei = 0
       }
       this.isLoading = false
     },
@@ -384,10 +384,14 @@ export default {
 
       try {
         const gasLimit = quantity * 200000
-        this.itemPriceWei = Number(this.pricePerNFTWei)
+        // this.itemPriceWei = Number(this.pricePerNFTWei)
+
+        // const overrides = {
+        //   value: String(Number(quantity) * Number(this.itemPriceWei)),
+        //   gasLimit: gasLimit,
+        // }
 
         const overrides = {
-          value: String(Number(quantity) * Number(this.itemPriceWei)),
           gasLimit: gasLimit,
         }
 
